@@ -140,7 +140,7 @@ class OrderController extends Controller
         ]);
 
         AuditLog::record(
-            tenantId: auth()->user()->tenant_id ?? 1,
+            tenantId: $this->tenantId(),
             userId: auth()->id(),
             auditableType: Order::class,
             auditableId: $order->id,
@@ -200,7 +200,7 @@ class OrderController extends Controller
         $order->update(['status' => $validated['status']]);
 
         AuditLog::record(
-            tenantId: auth()->user()->tenant_id ?? 1,
+            tenantId: $this->tenantId(),
             userId: auth()->id(),
             auditableType: Order::class,
             auditableId: $order->id,

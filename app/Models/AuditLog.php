@@ -49,7 +49,7 @@ class AuditLog extends Model
     }
 
     public static function record(
-        int $tenantId,
+        ?int $tenantId,
         ?int $userId,
         string $auditableType,
         int $auditableId,
