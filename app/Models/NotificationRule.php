@@ -64,15 +64,15 @@ class NotificationRule extends Model
         }
 
         foreach ($conditions as $field => $expected) {
-            $actual = $context[$field] ?? null;
-            if ($actual === null) {
-                continue;
-            }
-
             if ($field === 'min_amount') {
                 if ((float) ($context['total_amount'] ?? 0) < (float) $expected) {
                     return false;
                 }
+                continue;
+            }
+
+            $actual = $context[$field] ?? null;
+            if ($actual === null) {
                 continue;
             }
 

@@ -50,11 +50,11 @@
             <div class="grid grid-cols-1 gap-4 mb-4">
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1">Subject (for email)</label>
-                    <x-ui.input name="subject" placeholder="e.g. Your order {{order_no}} has been placed" />
+                    <x-ui.input name="subject" :placeholder="'e.g. Your order {{order_no}} has been placed'" />
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-zinc-600 mb-1">Body</label>
-                    <x-ui.textarea name="body" rows="4" placeholder="Hi {{customer_name}}, your order #{{order_no}} has been received." required />
+                    <x-ui.textarea name="body" rows="4" :placeholder="'Hi {{customer_name}}, your order #{{order_no}} has been received.'" required />
                 </div>
             </div>
 
