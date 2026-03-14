@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\BillingController;
 use App\Http\Controllers\Settings\CourierController;
+use App\Http\Controllers\Settings\IntegrationController as SettingsIntegrationController;
 use App\Http\Controllers\Settings\OrderSettingsController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\TeamController;
@@ -86,6 +87,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/couriers', [CourierController::class, 'store'])->name('couriers.store');
         Route::patch('/couriers/{courier}', [CourierController::class, 'update'])->name('couriers.update');
         Route::delete('/couriers/{courier}', [CourierController::class, 'destroy'])->name('couriers.destroy');
+
+        // Integration settings
+        Route::get('/integrations/{integration}', [SettingsIntegrationController::class, 'show'])->name('integrations.show');
+        Route::patch('/integrations/{integration}', [SettingsIntegrationController::class, 'update'])->name('integrations.update');
+        Route::post('/integrations/{integration}/toggle', [SettingsIntegrationController::class, 'toggle'])->name('integrations.toggle');
+        Route::post('/integrations/{integration}/test-connection', [SettingsIntegrationController::class, 'testConnection'])->name('integrations.test-connection');
+        Route::post('/integrations/{integration}/sync', [SettingsIntegrationController::class, 'sync'])->name('integrations.sync');
+        Route::get('/integrations/{integration}/logs', [SettingsIntegrationController::class, 'logs'])->name('integrations.logs');
+        Route::post('/integrations/{integration}/regenerate-webhook-secret', [SettingsIntegrationController::class, 'regenerateWebhookSecret'])->name('integrations.regenerate-webhook-secret');
     });
 
     // Logout
