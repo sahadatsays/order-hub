@@ -55,6 +55,25 @@ class Order extends Model
         'refunded' => 'Refunded',
     ];
 
+    const PAYMENT_STATUS_COLORS = [
+        'unpaid'   => 'red',
+        'partial'  => 'yellow',
+        'paid'     => 'green',
+        'refunded' => 'zinc',
+    ];
+
+    const SOURCE_COLORS = [
+        'facebook'    => 'blue',
+        'website'     => 'indigo',
+        'whatsapp'    => 'green',
+        'woocommerce' => 'purple',
+        'shopify'     => 'green',
+        'pos'         => 'orange',
+        'manual'      => 'zinc',
+        'phone'       => 'yellow',
+        'other'       => 'zinc',
+    ];
+
     protected $fillable = [
         'tenant_id',
         'customer_id',
@@ -156,6 +175,21 @@ class Order extends Model
     public function getSourceLabelAttribute(): string
     {
         return self::SOURCES[$this->source] ?? ucfirst($this->source);
+    }
+
+    public function getSourceColorAttribute(): string
+    {
+        return self::SOURCE_COLORS[$this->source] ?? 'zinc';
+    }
+
+    public function getPaymentStatusLabelAttribute(): string
+    {
+        return self::PAYMENT_STATUSES[$this->payment_status] ?? ucfirst($this->payment_status);
+    }
+
+    public function getPaymentStatusColorAttribute(): string
+    {
+        return self::PAYMENT_STATUS_COLORS[$this->payment_status] ?? 'zinc';
     }
 
     public function getDueAmountAttribute(): float

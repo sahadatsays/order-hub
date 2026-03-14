@@ -9,6 +9,8 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Shipment;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,15 +22,19 @@ class OrderController extends Controller
         $tid = $this->tenantId();
 
         $query = Order::where('tenant_id', $tid)
-            ->with(['customer', 'shipment'])
+            ->with(['customer', 'shipment.courier', 'items', 'createdBy'])
             ->when($request->search, fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('order_number', 'like', "%{$request->search}%")
                     ->orWhere('customer_name', 'like', "%{$request->search}%")
-                    ->orWhere('customer_phone', 'like', "%{$request->search}%");
+                    ->orWhere('customer_phone', 'like', "%{$request->search}%")
+                    ->orWhere('source_order_id', 'like', "%{$request->search}%");
             }))
             ->when($request->status && $request->status !== 'all', fn ($q) => $q->where('status', $request->status))
             ->when($request->source, fn ($q) => $q->where('source', $request->source))
             ->when($request->payment_status, fn ($q) => $q->where('payment_status', $request->payment_status))
+            ->when($request->shipment_status, fn ($q) => $q->whereHas('shipment', fn ($sq) => $sq->where('status', $request->shipment_status)))
+            ->when($request->courier_id, fn ($q) => $q->whereHas('shipment', fn ($sq) => $sq->where('courier_id', $request->courier_id)))
+            ->when($request->created_by, fn ($q) => $q->where('created_by', $request->created_by))
             ->when($request->from, fn ($q) => $q->whereDate('ordered_at', '>=', $request->from))
             ->when($request->to, fn ($q) => $q->whereDate('ordered_at', '<=', $request->to))
             ->orderByDesc('ordered_at');
@@ -49,7 +55,10 @@ class OrderController extends Controller
                 ->sum('total_amount'),
         ];
 
-        return view('orders.index', compact('orders', 'stats', 'statusCounts'));
+        $couriers = Courier::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
+        $users = User::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
+
+        return view('orders.index', compact('orders', 'stats', 'statusCounts', 'couriers', 'users'));
     }
 
     public function create(): View
