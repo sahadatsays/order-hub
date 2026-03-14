@@ -6,18 +6,18 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IntegrationController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Settings\ApiKeyController;
 use App\Http\Controllers\Settings\BillingController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CourierController;
 use App\Http\Controllers\Settings\GeneralController;
-use App\Http\Controllers\Settings\ApiKeyController;
 use App\Http\Controllers\Settings\IntegrationController as SettingsIntegrationController;
 use App\Http\Controllers\Settings\OrderSettingsController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/pos/barcode', [PosController::class, 'resolveBarcode'])->name('pos.barcode');
 
     // Customers
+    Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search');
     Route::resource('customers', CustomerController::class);
 
     // Products

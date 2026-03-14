@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\Order;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -26,12 +26,36 @@ class CustomerController extends Controller
             ->withQueryString();
 
         $stats = [
-            'total'      => Customer::where('tenant_id', $tid)->count(),
+            'total' => Customer::where('tenant_id', $tid)->count(),
             'this_month' => Customer::where('tenant_id', $tid)->whereMonth('created_at', now()->month)->count(),
-            'repeat'     => Customer::where('tenant_id', $tid)->whereHas('orders', fn ($q) => $q, '>=', 2)->count(),
+            'repeat' => Customer::where('tenant_id', $tid)->whereHas('orders', fn ($q) => $q, '>=', 2)->count(),
         ];
 
         return view('customers.index', compact('customers', 'stats'));
+    }
+
+    /**
+     * AJAX: Search customers by name, phone, or email.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $tid = $this->tenantId();
+        $q = $request->get('q', '');
+
+        if (strlen($q) < 2) {
+            return response()->json([]);
+        }
+
+        $customers = Customer::where('tenant_id', $tid)
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('phone', 'like', "%{$q}%")
+                    ->orWhere('email', 'like', "%{$q}%");
+            })
+            ->limit(10)
+            ->get(['id', 'name', 'phone', 'email']);
+
+        return response()->json($customers);
     }
 
     public function create(): View
@@ -42,16 +66,16 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'email'       => 'nullable|email|max:255',
-            'phone'       => 'nullable|string|max:30',
-            'address'     => 'nullable|string|max:500',
-            'city'        => 'nullable|string|max:100',
-            'state'       => 'nullable|string|max:100',
-            'country'     => 'nullable|string|max:2',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:30',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:2',
             'postal_code' => 'nullable|string|max:20',
-            'source'      => 'nullable|string|max:50',
-            'notes'       => 'nullable|string|max:2000',
+            'source' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:2000',
         ]);
 
         $customer = Customer::create(array_merge($validated, [
@@ -77,16 +101,16 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'email'       => 'nullable|email|max:255',
-            'phone'       => 'nullable|string|max:30',
-            'address'     => 'nullable|string|max:500',
-            'city'        => 'nullable|string|max:100',
-            'state'       => 'nullable|string|max:100',
-            'country'     => 'nullable|string|max:2',
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:30',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:100',
+            'state' => 'nullable|string|max:100',
+            'country' => 'nullable|string|max:2',
             'postal_code' => 'nullable|string|max:20',
-            'source'      => 'nullable|string|max:50',
-            'notes'       => 'nullable|string|max:2000',
+            'source' => 'nullable|string|max:50',
+            'notes' => 'nullable|string|max:2000',
         ]);
 
         $customer->update($validated);
