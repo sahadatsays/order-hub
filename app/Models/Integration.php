@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Integration extends Model
 {
@@ -50,6 +51,11 @@ class Integration extends Model
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
+    }
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(IntegrationLog::class)->orderByDesc('created_at');
     }
 
     public function getTypeLabelAttribute(): string

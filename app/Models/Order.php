@@ -62,6 +62,7 @@ class Order extends Model
         'order_number',
         'source',
         'source_order_id',
+        'source_raw_payload',
         'customer_name',
         'customer_phone',
         'customer_email',
@@ -96,6 +97,7 @@ class Order extends Model
             'total_amount' => 'decimal:2',
             'paid_amount' => 'decimal:2',
             'ordered_at' => 'datetime',
+            'source_raw_payload' => 'array',
         ];
     }
 
@@ -127,6 +129,11 @@ class Order extends Model
     public function invoice(): HasOne
     {
         return $this->hasOne(Invoice::class)->latest();
+    }
+
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(OrderStatusLog::class)->orderByDesc('created_at');
     }
 
     public function auditLogs(): HasMany
