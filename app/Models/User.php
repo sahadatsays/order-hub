@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,15 +15,25 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    const ROLES = [
+        'owner'   => 'Owner',
+        'admin'   => 'Admin',
+        'manager' => 'Manager',
+        'staff'   => 'Staff',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
+        'tenant_id',
         'name',
         'email',
         'password',
+        'role',
+        'is_active',
     ];
 
     /**
@@ -44,6 +56,46 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function tenant(): BelongsTo
+    {
+        return $this->belongsTo(Tenant::class);
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'created_by');
+    }
+
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class);
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->role === 'owner';
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['owner', 'admin']);
+    }
+
+    public function isManager(): bool
+    {
+        return in_array($this->role, ['owner', 'admin', 'manager']);
+    }
+
+    public function hasRole(string $role): bool
+    {
+        $hierarchy = ['owner', 'admin', 'manager', 'staff'];
+        $userIndex = array_search($this->role, $hierarchy);
+        $requiredIndex = array_search($role, $hierarchy);
+
+        return $userIndex !== false && $requiredIndex !== false && $userIndex <= $requiredIndex;
     }
 }

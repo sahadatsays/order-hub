@@ -4,14 +4,14 @@
     <!-- Page header -->
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-3">
-            <a href="#" class="p-2 rounded-md hover:bg-zinc-100 text-zinc-500 transition-colors">
+            <a href="{{ route('orders.index') }}" class="p-2 rounded-md hover:bg-zinc-100 text-zinc-500 transition-colors">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
             </a>
             <div>
                 <p class="text-xs text-zinc-400 mb-0.5">
-                    <a href="#" class="hover:text-zinc-600 transition-colors">Orders</a>
+                    <a href="{{ route('orders.index') }}" class="hover:text-zinc-600 transition-colors">Orders</a>
                     <span class="mx-1.5">›</span>
                     <span class="text-zinc-600">New Order</span>
                 </p>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <form id="create-order-form" action="#" method="POST">
+    <form id="create-order-form" action="{{ route('orders.store') }}" method="POST">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
