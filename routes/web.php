@@ -13,11 +13,15 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\BillingController;
+use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CourierController;
+use App\Http\Controllers\Settings\GeneralController;
+use App\Http\Controllers\Settings\ApiKeyController;
 use App\Http\Controllers\Settings\IntegrationController as SettingsIntegrationController;
 use App\Http\Controllers\Settings\OrderSettingsController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\TeamController;
+use App\Http\Controllers\Settings\WebhookController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -93,6 +97,11 @@ Route::middleware('auth')->group(function () {
         Route::redirect('/', '/settings/profile')->name('index');
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+        Route::get('/general', [GeneralController::class, 'index'])->name('general');
+        Route::patch('/general', [GeneralController::class, 'update'])->name('general.update');
+        Route::get('/branding', [BrandingController::class, 'index'])->name('branding');
+        Route::patch('/branding', [BrandingController::class, 'update'])->name('branding.update');
         Route::get('/team', [TeamController::class, 'index'])->name('team');
         Route::post('/team/invite', [TeamController::class, 'invite'])->name('team.invite');
         Route::delete('/team/{user}', [TeamController::class, 'remove'])->name('team.remove');
@@ -103,6 +112,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/couriers', [CourierController::class, 'store'])->name('couriers.store');
         Route::patch('/couriers/{courier}', [CourierController::class, 'update'])->name('couriers.update');
         Route::delete('/couriers/{courier}', [CourierController::class, 'destroy'])->name('couriers.destroy');
+        Route::get('/api-keys', [ApiKeyController::class, 'index'])->name('api-keys');
+        Route::post('/api-keys', [ApiKeyController::class, 'store'])->name('api-keys.store');
+        Route::post('/api-keys/{apiKey}/revoke', [ApiKeyController::class, 'revoke'])->name('api-keys.revoke');
+        Route::delete('/api-keys/{apiKey}', [ApiKeyController::class, 'destroy'])->name('api-keys.destroy');
+        Route::get('/webhooks', [WebhookController::class, 'index'])->name('webhooks');
+        Route::post('/webhooks', [WebhookController::class, 'store'])->name('webhooks.store');
+        Route::post('/webhooks/{webhook}/toggle', [WebhookController::class, 'toggle'])->name('webhooks.toggle');
+        Route::delete('/webhooks/{webhook}', [WebhookController::class, 'destroy'])->name('webhooks.destroy');
+        Route::get('/webhooks/{webhook}/logs', [WebhookController::class, 'logs'])->name('webhooks.logs');
 
         // Integration settings
         Route::get('/integrations/{integration}', [SettingsIntegrationController::class, 'show'])->name('integrations.show');
