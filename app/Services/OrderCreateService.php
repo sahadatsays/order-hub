@@ -101,8 +101,14 @@ class OrderCreateService
         }
 
         $customer = Customer::where('tenant_id', $data->tenant_id)
-            ->when($data->customer_phone, fn ($q) => $q->where('phone', $data->customer_phone))
-            ->when(! $data->customer_phone && $data->customer_email, fn ($q) => $q->where('email', $data->customer_email))
+            ->where(function ($q) use ($data) {
+                if ($data->customer_phone) {
+                    $q->where('phone', $data->customer_phone);
+                }
+                if ($data->customer_email) {
+                    $q->orWhere('email', $data->customer_email);
+                }
+            })
             ->first();
 
         if ($customer) {

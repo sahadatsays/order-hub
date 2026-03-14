@@ -92,7 +92,7 @@ class ShipmentCreateService
             'shipping_address' => $order->shipping_address,
             'shipping_city'    => $order->shipping_city,
             'notes'            => $order->notes,
-            'amount_to_collect' => max(0, $order->total_amount - $order->paid_amount),
+            'amount_to_collect' => max(0, ($order->total_amount ?? 0) - ($order->paid_amount ?? 0)),
             'item_quantity'    => $order->items()->sum('quantity'),
         ], $extraData);
     }

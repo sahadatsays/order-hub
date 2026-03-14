@@ -17,7 +17,7 @@ class SyncTrackingJob implements ShouldQueue
 
     public int $tries = 3;
 
-    public int $backoff = 60;
+    public array $backoff = [60, 120, 240];
 
     public function __construct(
         public readonly int $shipmentId,

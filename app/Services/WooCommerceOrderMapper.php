@@ -46,7 +46,7 @@ class WooCommerceOrderMapper
             status: $this->mapStatus($payload['status'] ?? 'pending'),
             payment_status: $this->mapPaymentStatus($payload['status'] ?? 'pending'),
             payment_method: $payload['payment_method_title'] ?? $payload['payment_method'] ?? null,
-            subtotal: (float) ($payload['total'] ?? 0) - (float) ($payload['shipping_total'] ?? 0) - (float) ($payload['total_tax'] ?? 0) + (float) ($payload['discount_total'] ?? 0),
+            subtotal: $this->calculateSubtotal($payload),
             discount_amount: (float) ($payload['discount_total'] ?? 0),
             shipping_charge: (float) ($payload['shipping_total'] ?? 0),
             tax_amount: (float) ($payload['total_tax'] ?? 0),
@@ -91,6 +91,20 @@ class WooCommerceOrderMapper
     public function mapStatus(string $wcStatus): string
     {
         return self::STATUS_MAP[$wcStatus] ?? 'pending';
+    }
+
+    /**
+     * Calculate subtotal from WooCommerce totals.
+     * Subtotal = total - shipping - tax + discount (since WC total already has discount applied).
+     */
+    private function calculateSubtotal(array $payload): float
+    {
+        $totalAmount = (float) ($payload['total'] ?? 0);
+        $shippingCost = (float) ($payload['shipping_total'] ?? 0);
+        $taxAmount = (float) ($payload['total_tax'] ?? 0);
+        $discountTotal = (float) ($payload['discount_total'] ?? 0);
+
+        return $totalAmount - $shippingCost - $taxAmount + $discountTotal;
     }
 
     public function mapPaymentStatus(string $wcStatus): string
