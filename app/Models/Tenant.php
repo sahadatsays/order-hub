@@ -83,6 +83,11 @@ class Tenant extends Model
         return $this->hasMany(Integration::class);
     }
 
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
+    }
+
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class);
