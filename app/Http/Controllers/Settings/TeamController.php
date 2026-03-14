@@ -13,7 +13,7 @@ class TeamController extends Controller
     public function index(): View
     {
         $members = User::where('tenant_id', $this->tenantId())
-            ->orderByRaw("FIELD(role, 'owner', 'admin', 'manager', 'staff')")
+            ->orderByRaw("CASE role WHEN 'owner' THEN 0 WHEN 'admin' THEN 1 WHEN 'manager' THEN 2 WHEN 'staff' THEN 3 ELSE 4 END")
             ->get();
 
         return view('settings.team', compact('members'));
