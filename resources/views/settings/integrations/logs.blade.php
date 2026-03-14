@@ -14,11 +14,10 @@
 
     <x-ui.card>
         @if($logs->isEmpty())
-        <x-ui.empty-state>
+        <x-ui.empty-state title="No logs found" description="No sync logs found for this integration.">
             <x-slot:icon>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
             </x-slot:icon>
-            No sync logs found for this integration.
         </x-ui.empty-state>
         @else
         <div class="overflow-x-auto">
