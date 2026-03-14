@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
@@ -71,6 +72,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/integrations', [IntegrationController::class, 'index'])->name('integrations.index');
     Route::post('/integrations/{type}/connect', [IntegrationController::class, 'connect'])->name('integrations.connect');
     Route::delete('/integrations/{integration}', [IntegrationController::class, 'disconnect'])->name('integrations.disconnect');
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/rules', [NotificationController::class, 'rules'])->name('notifications.rules');
+    Route::post('/notifications/rules', [NotificationController::class, 'storeRule'])->name('notifications.rules.store');
+    Route::post('/notifications/rules/{rule}/toggle', [NotificationController::class, 'toggleRule'])->name('notifications.rules.toggle');
+    Route::delete('/notifications/rules/{rule}', [NotificationController::class, 'destroyRule'])->name('notifications.rules.destroy');
+    Route::get('/notifications/templates', [NotificationController::class, 'templates'])->name('notifications.templates');
+    Route::post('/notifications/templates', [NotificationController::class, 'storeTemplate'])->name('notifications.templates.store');
+    Route::delete('/notifications/templates/{template}', [NotificationController::class, 'destroyTemplate'])->name('notifications.templates.destroy');
+    Route::get('/notifications/logs', [NotificationController::class, 'logs'])->name('notifications.logs');
+    Route::post('/notifications/{notification}/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
+    Route::post('/notifications/{notification}/retry', [NotificationController::class, 'retry'])->name('notifications.retry');
+    Route::get('/notifications/{notification}', [NotificationController::class, 'show'])->name('notifications.show');
 
     // Settings
     Route::prefix('settings')->name('settings.')->group(function () {

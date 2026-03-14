@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -43,11 +45,44 @@ class DashboardController extends Controller
             ->get()
             ->keyBy('status');
 
+        $monthlyRevenue = $this->getMonthlyRevenue($tid);
+
+        $recentActivity = AuditLog::where('tenant_id', $tid)
+            ->with('user')
+            ->orderByDesc('created_at')
+            ->limit(8)
+            ->get();
+
         return view('dashboard', compact(
             'stats',
             'recentOrders',
             'ordersBySource',
-            'ordersByStatus'
+            'ordersByStatus',
+            'monthlyRevenue',
+            'recentActivity'
         ));
+    }
+
+    private function getMonthlyRevenue(int $tenantId): array
+    {
+        $year = now()->year;
+        $months = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $start = Carbon::create($year, $m, 1)->startOfMonth();
+            $end = $start->copy()->endOfMonth();
+
+            $revenue = Order::where('tenant_id', $tenantId)
+                ->whereBetween('ordered_at', [$start, $end])
+                ->whereNotIn('status', ['cancelled', 'refunded'])
+                ->sum('total_amount');
+
+            $months[] = [
+                'month' => $start->format('M'),
+                'revenue' => (float) $revenue,
+            ];
+        }
+
+        return $months;
     }
 }
