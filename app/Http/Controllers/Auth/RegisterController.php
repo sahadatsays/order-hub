@@ -29,8 +29,8 @@ class RegisterController extends Controller
         ]);
 
         $slug = Str::slug($validated['company_name']);
-        if (Tenant::where('slug', $slug)->exists()) {
-            $slug .= '-'.Str::random(5);
+        while (Tenant::where('slug', $slug)->exists()) {
+            $slug = Str::slug($validated['company_name']).'-'.Str::random(5);
         }
 
         $tenant = Tenant::create([
