@@ -22,7 +22,8 @@ class OrderController extends Controller
         $tid = $this->tenantId();
 
         $query = Order::where('tenant_id', $tid)
-            ->with(['customer', 'shipment.courier', 'items', 'createdBy'])
+            ->with(['customer', 'shipment.courier', 'createdBy'])
+            ->withCount('items')
             ->when($request->search, fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('order_number', 'like', "%{$request->search}%")
                     ->orWhere('customer_name', 'like', "%{$request->search}%")

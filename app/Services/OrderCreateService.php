@@ -104,9 +104,11 @@ class OrderCreateService
             ->where(function ($q) use ($data) {
                 if ($data->customer_phone) {
                     $q->where('phone', $data->customer_phone);
-                }
-                if ($data->customer_email) {
-                    $q->orWhere('email', $data->customer_email);
+                    if ($data->customer_email) {
+                        $q->orWhere('email', $data->customer_email);
+                    }
+                } elseif ($data->customer_email) {
+                    $q->where('email', $data->customer_email);
                 }
             })
             ->first();

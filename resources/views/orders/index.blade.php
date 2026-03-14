@@ -51,7 +51,19 @@
                    class="px-4 py-2.5 text-sm border-b-2 whitespace-nowrap {{ request('status') === $statusKey ? 'font-medium text-indigo-600 border-indigo-600' : 'text-zinc-500 hover:text-zinc-700 border-transparent' }}">
                     {{ $statusLabel }}
                     @if($count > 0)
-                        <span class="ml-1 px-1.5 py-0.5 rounded-full bg-{{ \App\Models\Order::STATUS_COLORS[$statusKey] ?? 'zinc' }}-50 text-{{ \App\Models\Order::STATUS_COLORS[$statusKey] ?? 'zinc' }}-600 text-xs">{{ $count }}</span>
+                        @php
+                            $tabBadgeClasses = match(\App\Models\Order::STATUS_COLORS[$statusKey] ?? 'zinc') {
+                                'yellow' => 'bg-yellow-50 text-yellow-600',
+                                'blue' => 'bg-blue-50 text-blue-600',
+                                'indigo' => 'bg-indigo-50 text-indigo-600',
+                                'purple' => 'bg-purple-50 text-purple-600',
+                                'orange' => 'bg-orange-50 text-orange-600',
+                                'green' => 'bg-green-50 text-green-600',
+                                'red' => 'bg-red-50 text-red-600',
+                                default => 'bg-zinc-100 text-zinc-600',
+                            };
+                        @endphp
+                        <span class="ml-1 px-1.5 py-0.5 rounded-full {{ $tabBadgeClasses }} text-xs">{{ $count }}</span>
                     @endif
                 </a>
             @endif
@@ -201,10 +213,18 @@
                                 <div class="flex items-center gap-2">
                                     @php
                                         $initials = collect(explode(' ', $order->customer_name))->map(fn($w) => strtoupper(substr($w, 0, 1)))->take(2)->join('');
-                                        $avatarColors = ['blue', 'purple', 'green', 'orange', 'red', 'yellow', 'indigo'];
-                                        $avatarColor = $avatarColors[$order->id % count($avatarColors)];
+                                        $avatarClasses = match($order->id % 7) {
+                                            0 => 'bg-blue-100 text-blue-600',
+                                            1 => 'bg-purple-100 text-purple-600',
+                                            2 => 'bg-green-100 text-green-600',
+                                            3 => 'bg-orange-100 text-orange-600',
+                                            4 => 'bg-red-100 text-red-600',
+                                            5 => 'bg-yellow-100 text-yellow-700',
+                                            6 => 'bg-indigo-100 text-indigo-600',
+                                            default => 'bg-zinc-100 text-zinc-600',
+                                        };
                                     @endphp
-                                    <div class="w-7 h-7 rounded-full bg-{{ $avatarColor }}-100 flex items-center justify-center text-xs font-semibold text-{{ $avatarColor }}-600 shrink-0">{{ $initials }}</div>
+                                    <div class="w-7 h-7 rounded-full {{ $avatarClasses }} flex items-center justify-center text-xs font-semibold shrink-0">{{ $initials }}</div>
                                     <div class="min-w-0">
                                         <p class="font-medium text-zinc-900 truncate">{{ $order->customer_name }}</p>
                                         <p class="text-xs text-zinc-400 truncate">{{ $order->customer_phone ?: $order->customer_email ?: '—' }}</p>
@@ -214,7 +234,7 @@
                             <td class="px-4 py-3">
                                 <x-ui.badge :color="$order->source_color">{{ $order->source_label }}</x-ui.badge>
                             </td>
-                            <td class="px-4 py-3 text-zinc-600">{{ $order->items_count ?? $order->items->count() }} {{ Str::plural('item', $order->items_count ?? $order->items->count()) }}</td>
+                            <td class="px-4 py-3 text-zinc-600">{{ $order->items_count }} {{ Str::plural('item', $order->items_count) }}</td>
                             <td class="px-4 py-3 text-right">
                                 <p class="font-medium text-zinc-900">৳{{ number_format($order->total_amount, 2) }}</p>
                                 @if($order->due_amount > 0)
@@ -335,16 +355,17 @@ function bulkStatusUpdate(status) {
     if (ids.length === 0) return;
     if (!confirm('Update ' + ids.length + ' order(s) to ' + status + '?')) return;
 
-    ids.forEach(id => {
+    // Submit the first selected order's status update (server-side bulk would be better)
+    if (ids.length > 0) {
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '/orders/' + id + '/status';
+        form.action = '/orders/' + ids[0] + '/status';
         form.innerHTML = '<input type="hidden" name="_token" value="{{ csrf_token() }}">' +
                           '<input type="hidden" name="_method" value="PATCH">' +
                           '<input type="hidden" name="status" value="' + status + '">';
         document.body.appendChild(form);
         form.submit();
-    });
+    }
 }
 </script>
 </x-layouts.app>
