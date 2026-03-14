@@ -56,7 +56,7 @@
                             </span>
 
                             {{-- Status --}}
-                            @if($member->email_verified_at || ($member->pivot->status ?? null) === 'active')
+                            @if($member->is_active)
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 ring-1 ring-green-200">Active</span>
                             @else
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-zinc-50 text-zinc-500 ring-1 ring-zinc-200">Inactive</span>
