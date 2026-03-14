@@ -33,6 +33,9 @@
     {{-- Sidebar --}}
     <x-app.sidebar />
 
+    {{-- Global Search Modal --}}
+    <x-app.search-modal />
+
     {{-- Main content area — offset by sidebar width on large screens --}}
     <div class="flex flex-col min-h-screen min-w-0 lg:ml-64 flex-1">
 

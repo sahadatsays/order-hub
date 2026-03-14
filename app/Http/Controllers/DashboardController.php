@@ -6,6 +6,8 @@ use App\Models\AuditLog;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
@@ -84,5 +86,75 @@ class DashboardController extends Controller
         }
 
         return $months;
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $q = trim($request->input('q', ''));
+        $tid = $this->tenantId();
+
+        if (strlen($q) < 2) {
+            return response()->json(['results' => []]);
+        }
+
+        $results = [];
+        $escaped = str_replace(['%', '_'], ['\%', '\_'], $q);
+
+        // Search orders
+        $orders = Order::where('tenant_id', $tid)
+            ->where(function ($query) use ($escaped) {
+                $query->where('order_number', 'like', "%{$escaped}%")
+                    ->orWhere('status', 'like', "%{$escaped}%");
+            })
+            ->limit(5)
+            ->get();
+
+        foreach ($orders as $order) {
+            $results[] = [
+                'type' => 'order',
+                'label' => $order->order_number,
+                'description' => ucfirst($order->status) . ' — ৳' . number_format($order->total_amount, 2),
+                'url' => route('orders.show', $order),
+            ];
+        }
+
+        // Search customers
+        $customers = Customer::where('tenant_id', $tid)
+            ->where(function ($query) use ($escaped) {
+                $query->where('name', 'like', "%{$escaped}%")
+                    ->orWhere('phone', 'like', "%{$escaped}%")
+                    ->orWhere('email', 'like', "%{$escaped}%");
+            })
+            ->limit(5)
+            ->get();
+
+        foreach ($customers as $customer) {
+            $results[] = [
+                'type' => 'customer',
+                'label' => $customer->name,
+                'description' => $customer->phone ?? $customer->email ?? '',
+                'url' => route('customers.show', $customer),
+            ];
+        }
+
+        // Search products
+        $products = Product::where('tenant_id', $tid)
+            ->where(function ($query) use ($escaped) {
+                $query->where('name', 'like', "%{$escaped}%")
+                    ->orWhere('sku', 'like', "%{$escaped}%");
+            })
+            ->limit(5)
+            ->get();
+
+        foreach ($products as $product) {
+            $results[] = [
+                'type' => 'product',
+                'label' => $product->name,
+                'description' => ($product->sku ? "SKU: {$product->sku}" : '') . ' — ৳' . number_format($product->price, 2),
+                'url' => route('products.show', $product),
+            ];
+        }
+
+        return response()->json(['results' => $results]);
     }
 }

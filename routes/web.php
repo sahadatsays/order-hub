@@ -52,6 +52,9 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Global search
+    Route::get('/search', [DashboardController::class, 'search'])->name('search');
+
     // Orders
     Route::resource('orders', OrderController::class);
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
