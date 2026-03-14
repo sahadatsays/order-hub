@@ -24,6 +24,13 @@ class Order extends Model
         'on_hold'    => 'On Hold',
     ];
 
+    const ORDER_TYPES = [
+        'pos'         => 'POS',
+        'manual'      => 'Manual',
+        'ecommerce'   => 'Ecommerce',
+        'imported'    => 'Imported',
+    ];
+
     const SOURCES = [
         'facebook'    => 'Facebook',
         'website'     => 'Website',
@@ -80,6 +87,7 @@ class Order extends Model
         'created_by',
         'order_number',
         'source',
+        'order_type',
         'source_order_id',
         'source_raw_payload',
         'customer_name',
@@ -153,6 +161,11 @@ class Order extends Model
     public function statusLogs(): HasMany
     {
         return $this->hasMany(OrderStatusLog::class)->orderByDesc('created_at');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(OrderPayment::class)->orderByDesc('created_at');
     }
 
     public function auditLogs(): HasMany

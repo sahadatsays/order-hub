@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AuditLog;
+use App\DTOs\OrderData;
 use App\Models\Courier;
 use App\Models\Customer;
-use App\Models\Invoice;
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
-use App\Models\Shipment;
 use App\Models\User;
+use App\Services\OrderCalculationService;
+use App\Services\OrderCreateService;
+use App\Services\OrderPaymentService;
+use App\Services\OrderStatusService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
+    public function __construct(
+        protected OrderCreateService      $createService,
+        protected OrderCalculationService $calculationService,
+        protected OrderStatusService      $statusService,
+        protected OrderPaymentService     $paymentService,
+    ) {}
+
     public function index(Request $request): View
     {
         $tid = $this->tenantId();
@@ -75,88 +83,38 @@ class OrderController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'customer_id'         => 'nullable|exists:customers,id',
-            'source'              => 'required|in:' . implode(',', array_keys(Order::SOURCES)),
-            'customer_name'       => 'required|string|max:255',
-            'customer_phone'      => 'nullable|string|max:30',
-            'customer_email'      => 'nullable|email|max:255',
-            'shipping_address'    => 'nullable|string|max:500',
-            'shipping_city'       => 'nullable|string|max:100',
-            'payment_method'      => 'nullable|string|max:100',
-            'payment_status'      => 'required|in:unpaid,partial,paid',
-            'discount_amount'     => 'nullable|numeric|min:0',
-            'discount_code'       => 'nullable|string|max:50',
-            'shipping_charge'     => 'nullable|numeric|min:0',
-            'notes'               => 'nullable|string|max:2000',
-            'items'               => 'required|array|min:1',
-            'items.*.product_id'  => 'nullable|exists:products,id',
-            'items.*.product_name' => 'required|string|max:255',
-            'items.*.quantity'    => 'required|integer|min:1',
-            'items.*.unit_price'  => 'required|numeric|min:0',
+            'customer_id'              => 'nullable|exists:customers,id',
+            'source'                   => 'required|in:' . implode(',', array_keys(Order::SOURCES)),
+            'customer_name'            => 'required|string|max:255',
+            'customer_phone'           => 'nullable|string|max:30',
+            'customer_email'           => 'nullable|email|max:255',
+            'shipping_address'         => 'nullable|string|max:500',
+            'shipping_city'            => 'nullable|string|max:100',
+            'payment_method'           => 'nullable|string|max:100',
+            'payment_status'           => 'required|in:unpaid,partial,paid',
+            'discount_amount'          => 'nullable|numeric|min:0',
+            'discount_code'            => 'nullable|string|max:50',
+            'shipping_charge'          => 'nullable|numeric|min:0',
+            'paid_amount'              => 'nullable|numeric|min:0',
+            'notes'                    => 'nullable|string|max:2000',
+            'internal_notes'           => 'nullable|string|max:2000',
+            'items'                    => 'required|array|min:1',
+            'items.*.product_id'       => 'nullable|exists:products,id',
+            'items.*.product_name'     => 'required|string|max:255',
+            'items.*.product_sku'      => 'nullable|string|max:100',
+            'items.*.variant'          => 'nullable|string|max:255',
+            'items.*.quantity'         => 'required|integer|min:1',
+            'items.*.unit_price'       => 'required|numeric|min:0',
+            'items.*.discount_amount'  => 'nullable|numeric|min:0',
         ]);
 
-        $order = Order::create([
-            'tenant_id'        => auth()->user()->tenant_id,
-            'source'           => $validated['source'],
-            'customer_id'      => $validated['customer_id'] ?? null,
-            'created_by'       => auth()->id(),
-            'customer_name'    => $validated['customer_name'],
-            'customer_phone'   => $validated['customer_phone'] ?? null,
-            'customer_email'   => $validated['customer_email'] ?? null,
-            'shipping_address' => $validated['shipping_address'] ?? null,
-            'shipping_city'    => $validated['shipping_city'] ?? null,
-            'payment_method'   => $validated['payment_method'] ?? null,
-            'payment_status'   => $validated['payment_status'],
-            'discount_amount'  => $validated['discount_amount'] ?? 0,
-            'discount_code'    => $validated['discount_code'] ?? null,
-            'shipping_charge'  => $validated['shipping_charge'] ?? 0,
-            'notes'            => $validated['notes'] ?? null,
-            'status'           => 'pending',
-        ]);
-
-        $subtotal = 0;
-        foreach ($validated['items'] as $item) {
-            $lineTotal = $item['quantity'] * $item['unit_price'];
-            $subtotal += $lineTotal;
-
-            OrderItem::create([
-                'order_id'     => $order->id,
-                'product_id'   => $item['product_id'] ?? null,
-                'product_name' => $item['product_name'],
-                'product_sku'  => $item['product_sku'] ?? null,
-                'variant'      => $item['variant'] ?? null,
-                'quantity'     => $item['quantity'],
-                'unit_price'   => $item['unit_price'],
-                'line_total'   => $lineTotal,
-            ]);
-        }
-
-        $order->update([
-            'subtotal'     => $subtotal,
-            'total_amount' => $subtotal - $order->discount_amount + $order->shipping_charge + $order->tax_amount,
-        ]);
-
-        // Auto-create invoice
-        Invoice::create([
-            'tenant_id'       => auth()->user()->tenant_id,
-            'order_id'        => $order->id,
-            'subtotal'        => $order->subtotal ?? 0,
-            'discount_amount' => $order->discount_amount ?? 0,
-            'tax_amount'      => $order->tax_amount ?? 0,
-            'total_amount'    => $order->total_amount ?? 0,
-            'paid_amount'     => $order->payment_status === 'paid' ? ($order->total_amount ?? 0) : 0,
-            'status'          => $order->payment_status === 'paid' ? 'paid' : 'draft',
-            'issued_at'       => now(),
-        ]);
-
-        AuditLog::record(
-            tenantId: $this->tenantId(),
-            userId: auth()->id(),
-            auditableType: Order::class,
-            auditableId: $order->id,
-            event: 'created',
-            newValue: $order->status
+        $orderData = OrderData::fromRequest(
+            $validated,
+            auth()->user()->tenant_id,
+            auth()->id()
         );
+
+        $order = $this->createService->create($orderData);
 
         return redirect()->route('orders.show', $order)
             ->with('success', 'Order #' . $order->order_number . ' created successfully.');
@@ -164,13 +122,20 @@ class OrderController extends Controller
 
     public function show(Order $order): View
     {
-        $order->load(['items.product', 'customer', 'shipment.courier', 'invoice', 'createdBy', 'auditLogs.user']);
+        $order->load(['items.product', 'customer', 'shipment.courier', 'invoice', 'createdBy', 'payments', 'auditLogs.user']);
 
-        return view('orders.show', compact('order'));
+        $allowedTransitions = $this->statusService->allowedTransitions($order->status);
+
+        return view('orders.show', compact('order', 'allowedTransitions'));
     }
 
-    public function edit(Order $order): View
+    public function edit(Order $order): View|RedirectResponse
     {
+        if (! $this->statusService->canEdit($order)) {
+            return redirect()->route('orders.show', $order)
+                ->with('error', 'This order cannot be edited in its current status.');
+        }
+
         $tid = $this->tenantId();
         $customers = Customer::where('tenant_id', $tid)->orderBy('name')->get();
         $products  = Product::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
@@ -181,13 +146,17 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order): RedirectResponse
     {
+        if (! $this->statusService->canEdit($order)) {
+            return redirect()->route('orders.show', $order)
+                ->with('error', 'This order cannot be edited in its current status.');
+        }
+
         $validated = $request->validate([
             'customer_name'    => 'required|string|max:255',
             'customer_phone'   => 'nullable|string|max:30',
             'shipping_address' => 'nullable|string|max:500',
             'shipping_city'    => 'nullable|string|max:100',
             'payment_method'   => 'nullable|string|max:100',
-            'payment_status'   => 'required|in:unpaid,partial,paid',
             'discount_amount'  => 'nullable|numeric|min:0',
             'shipping_charge'  => 'nullable|numeric|min:0',
             'notes'            => 'nullable|string|max:2000',
@@ -195,6 +164,7 @@ class OrderController extends Controller
         ]);
 
         $order->update($validated);
+        $this->calculationService->recalculateOrder($order);
 
         return redirect()->route('orders.show', $order)
             ->with('success', 'Order updated.');
@@ -206,22 +176,41 @@ class OrderController extends Controller
             'status' => 'required|in:' . implode(',', array_keys(Order::STATUSES)),
         ]);
 
-        $oldStatus = $order->status;
-        $order->update(['status' => $validated['status']]);
-
-        AuditLog::record(
-            tenantId: $this->tenantId(),
-            userId: auth()->id(),
-            auditableType: Order::class,
-            auditableId: $order->id,
-            event: 'status_changed',
-            field: 'status',
-            oldValue: $oldStatus,
-            newValue: $validated['status']
-        );
+        try {
+            $this->statusService->transition($order, $validated['status'], auth()->id());
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
         return redirect()->back()
             ->with('success', 'Order status updated to ' . Order::STATUSES[$validated['status']] . '.');
+    }
+
+    public function addPayment(Request $request, Order $order): RedirectResponse
+    {
+        $validated = $request->validate([
+            'method'    => 'required|in:' . implode(',', array_keys(\App\Models\OrderPayment::METHODS)),
+            'amount'    => 'required|numeric|min:0.01',
+            'tendered'  => 'nullable|numeric|min:0',
+            'reference' => 'nullable|string|max:255',
+            'note'      => 'nullable|string|max:500',
+        ]);
+
+        try {
+            $this->paymentService->recordPayment(
+                order: $order,
+                method: $validated['method'],
+                amount: (float) $validated['amount'],
+                collectedBy: auth()->id(),
+                tendered: isset($validated['tendered']) ? (float) $validated['tendered'] : null,
+                reference: $validated['reference'] ?? null,
+                note: $validated['note'] ?? null,
+            );
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Payment recorded successfully.');
     }
 
     public function destroy(Order $order): RedirectResponse

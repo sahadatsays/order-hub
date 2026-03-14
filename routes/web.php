@@ -10,6 +10,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\BillingController;
@@ -54,6 +55,14 @@ Route::middleware('auth')->group(function () {
     // Orders
     Route::resource('orders', OrderController::class);
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/orders/{order}/payment', [OrderController::class, 'addPayment'])->name('orders.payment');
+
+    // POS
+    Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+    Route::post('/pos/orders', [PosController::class, 'store'])->name('pos.store');
+    Route::get('/pos/customers/search', [PosController::class, 'searchCustomers'])->name('pos.customers.search');
+    Route::get('/pos/products/search', [PosController::class, 'searchProducts'])->name('pos.products.search');
+    Route::get('/pos/barcode', [PosController::class, 'resolveBarcode'])->name('pos.barcode');
 
     // Customers
     Route::resource('customers', CustomerController::class);
