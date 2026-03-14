@@ -3,7 +3,8 @@
     "allow": [
       "Bash(vendor/bin/pint --dirty --format agent)",
       "Bash(vendor/bin/pint --dirty --format agent resources/views/components/ui/)",
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

@@ -21,7 +21,7 @@
 </head>
 <body class="h-full bg-zinc-50 antialiased font-sans text-zinc-800">
 
-<div id="app-wrapper" class="flex h-screen overflow-hidden">
+<div id="app-wrapper" class="flex min-h-screen">
 
     {{-- Mobile sidebar overlay --}}
     <div
@@ -33,8 +33,8 @@
     {{-- Sidebar --}}
     <x-app.sidebar />
 
-    {{-- Main content area --}}
-    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    {{-- Main content area — offset by sidebar width on large screens --}}
+    <div class="flex flex-col min-h-screen min-w-0 lg:ml-64 flex-1">
 
         {{-- Topbar --}}
         <x-app.topbar :title="$title" :subtitle="$subtitle ?? null" />
