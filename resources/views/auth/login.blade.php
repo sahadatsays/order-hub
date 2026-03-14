@@ -17,8 +17,7 @@
             </div>
         @endif
 
-        {{-- TODO: update action to route('login') once auth routes are registered --}}
-        <form method="POST" action="#" class="space-y-4">
+        <form method="POST" action="{{ route('login.store') }}" class="space-y-4">
             @csrf
 
             <x-ui.input
@@ -41,7 +40,7 @@
                     :error="$errors->first('password')"
                 />
                 <div class="mt-1.5 flex justify-end">
-                    <a href="#" class="text-xs text-indigo-600 hover:text-indigo-700 transition-colors">Forgot password?</a>
+                    <a href="{{ route('password.request') }}" class="text-xs text-indigo-600 hover:text-indigo-700 transition-colors">Forgot password?</a>
                 </div>
             </div>
 
@@ -56,7 +55,7 @@
 
         <p class="mt-6 text-center text-sm text-zinc-500">
             Don't have an account?
-            <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Create one →</a>
+            <a href="{{ route('register') }}" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Create one →</a>
         </p>
     </div>
 </x-layouts.auth>
