@@ -10,7 +10,10 @@ class InvoiceController extends Controller
 {
     public function index(Request $request): View
     {
-        $invoices = Invoice::with(['order'])
+        $tid = $this->tenantId();
+
+        $invoices = Invoice::where('tenant_id', $tid)
+            ->with(['order'])
             ->when($request->search, fn ($q) => $q->where('invoice_number', 'like', "%{$request->search}%")
                 ->orWhereHas('order', fn ($q) => $q->where('customer_name', 'like', "%{$request->search}%")))
             ->when($request->status, fn ($q) => $q->where('status', $request->status))
@@ -19,10 +22,10 @@ class InvoiceController extends Controller
             ->withQueryString();
 
         $stats = [
-            'total'   => Invoice::count(),
-            'paid'    => Invoice::where('status', 'paid')->count(),
-            'pending' => Invoice::whereIn('status', ['draft', 'sent'])->count(),
-            'overdue' => Invoice::where('status', 'sent')
+            'total'   => Invoice::where('tenant_id', $tid)->count(),
+            'paid'    => Invoice::where('tenant_id', $tid)->where('status', 'paid')->count(),
+            'pending' => Invoice::where('tenant_id', $tid)->whereIn('status', ['draft', 'sent'])->count(),
+            'overdue' => Invoice::where('tenant_id', $tid)->where('status', 'sent')
                 ->whereNotNull('due_at')
                 ->where('due_at', '<', now())
                 ->count(),

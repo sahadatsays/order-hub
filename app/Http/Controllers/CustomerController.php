@@ -11,7 +11,9 @@ class CustomerController extends Controller
 {
     public function index(Request $request): View
     {
-        $customers = Customer::query()
+        $tid = $this->tenantId();
+
+        $customers = Customer::where('tenant_id', $tid)
             ->when($request->search, fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
                     ->orWhere('phone', 'like', "%{$request->search}%")
@@ -24,9 +26,9 @@ class CustomerController extends Controller
             ->withQueryString();
 
         $stats = [
-            'total'        => Customer::count(),
-            'this_month'   => Customer::whereMonth('created_at', now()->month)->count(),
-            'repeat'       => Customer::where('orders_count', '>', 1)->count(),
+            'total'      => Customer::where('tenant_id', $tid)->count(),
+            'this_month' => Customer::where('tenant_id', $tid)->whereMonth('created_at', now()->month)->count(),
+            'repeat'     => Customer::where('tenant_id', $tid)->whereHas('orders', fn ($q) => $q, '>=', 2)->count(),
         ];
 
         return view('customers.index', compact('customers', 'stats'));

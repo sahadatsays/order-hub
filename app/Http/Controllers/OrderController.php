@@ -17,7 +17,10 @@ class OrderController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Order::with(['customer', 'shipment'])
+        $tid = $this->tenantId();
+
+        $query = Order::where('tenant_id', $tid)
+            ->with(['customer', 'shipment'])
             ->when($request->search, fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('order_number', 'like', "%{$request->search}%")
                     ->orWhere('customer_name', 'like', "%{$request->search}%")
@@ -32,15 +35,16 @@ class OrderController extends Controller
 
         $orders = $query->paginate(25)->withQueryString();
 
-        $statusCounts = Order::selectRaw('status, COUNT(*) as count')
+        $statusCounts = Order::where('tenant_id', $tid)
+            ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->pluck('count', 'status');
 
         $stats = [
-            'total'      => Order::count(),
-            'pending'    => Order::where('status', 'pending')->count(),
-            'processing' => Order::where('status', 'processing')->count(),
-            'revenue'    => Order::whereNotIn('status', ['cancelled', 'refunded'])
+            'total'      => Order::where('tenant_id', $tid)->count(),
+            'pending'    => Order::where('tenant_id', $tid)->where('status', 'pending')->count(),
+            'processing' => Order::where('tenant_id', $tid)->where('status', 'processing')->count(),
+            'revenue'    => Order::where('tenant_id', $tid)->whereNotIn('status', ['cancelled', 'refunded'])
                 ->whereMonth('ordered_at', now()->month)
                 ->sum('total_amount'),
         ];
@@ -50,9 +54,10 @@ class OrderController extends Controller
 
     public function create(): View
     {
-        $customers = Customer::orderBy('name')->get();
-        $products = Product::where('is_active', true)->orderBy('name')->get();
-        $couriers = Courier::where('is_active', true)->orderBy('name')->get();
+        $tid = $this->tenantId();
+        $customers = Customer::where('tenant_id', $tid)->orderBy('name')->get();
+        $products  = Product::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
+        $couriers  = Courier::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
 
         return view('orders.create', compact('customers', 'products', 'couriers'));
     }
@@ -156,8 +161,9 @@ class OrderController extends Controller
 
     public function edit(Order $order): View
     {
-        $customers = Customer::orderBy('name')->get();
-        $products = Product::where('is_active', true)->orderBy('name')->get();
+        $tid = $this->tenantId();
+        $customers = Customer::where('tenant_id', $tid)->orderBy('name')->get();
+        $products  = Product::where('tenant_id', $tid)->where('is_active', true)->orderBy('name')->get();
         $order->load('items');
 
         return view('orders.edit', compact('order', 'customers', 'products'));

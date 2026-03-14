@@ -15,13 +15,12 @@ return new class extends Migration
             $table->string('location')->nullable()->comment('warehouse location or shelf');
             $table->integer('quantity_on_hand')->default(0);
             $table->integer('quantity_reserved')->default(0)->comment('committed to pending orders');
-            $table->integer('quantity_available')->virtualAs('quantity_on_hand - quantity_reserved');
             $table->integer('reorder_point')->default(0);
             $table->integer('reorder_quantity')->default(0);
             $table->timestamp('last_counted_at')->nullable();
             $table->timestamps();
 
-            $table->unique(['tenant_id', 'product_id', 'location']);
+            $table->unique(['tenant_id', 'product_id']);
             $table->index('tenant_id');
         });
     }

@@ -10,7 +10,7 @@ class IntegrationController extends Controller
 {
     public function index(): View
     {
-        $integrations = Integration::get()->keyBy('type');
+        $integrations = Integration::where('tenant_id', $this->tenantId())->get()->keyBy('type');
 
         $availableTypes = Integration::TYPES;
 

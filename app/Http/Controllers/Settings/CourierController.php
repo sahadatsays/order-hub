@@ -11,7 +11,10 @@ class CourierController extends Controller
 {
     public function index(): View
     {
-        $couriers = Courier::orderBy('is_default', 'desc')->orderBy('name')->get();
+        $couriers = Courier::where('tenant_id', $this->tenantId())
+            ->orderBy('is_default', 'desc')
+            ->orderBy('name')
+            ->get();
 
         return view('settings.couriers', compact('couriers'));
     }
@@ -31,7 +34,9 @@ class CourierController extends Controller
         $validated['is_default'] = $request->boolean('is_default');
 
         if ($validated['is_default']) {
-            Courier::where('is_default', true)->update(['is_default' => false]);
+            Courier::where('tenant_id', auth()->user()->tenant_id)
+                ->where('is_default', true)
+                ->update(['is_default' => false]);
         }
 
         Courier::create(array_merge($validated, [
@@ -57,7 +62,10 @@ class CourierController extends Controller
         $validated['is_default'] = $request->boolean('is_default');
 
         if ($validated['is_default']) {
-            Courier::where('id', '!=', $courier->id)->where('is_default', true)->update(['is_default' => false]);
+            Courier::where('tenant_id', auth()->user()->tenant_id)
+                ->where('id', '!=', $courier->id)
+                ->where('is_default', true)
+                ->update(['is_default' => false]);
         }
 
         $courier->update($validated);

@@ -11,7 +11,10 @@ class InventoryController extends Controller
 {
     public function index(Request $request): View
     {
-        $items = InventoryItem::with('product')
+        $tid = $this->tenantId();
+
+        $items = InventoryItem::where('tenant_id', $tid)
+            ->with('product')
             ->when($request->search, fn ($q) => $q->whereHas('product', fn ($q) => $q->where('name', 'like', "%{$request->search}%")
                 ->orWhere('sku', 'like', "%{$request->search}%")))
             ->when($request->filter === 'low_stock', fn ($q) => $q->whereColumn('quantity_on_hand', '<=', 'reorder_point'))
@@ -21,10 +24,11 @@ class InventoryController extends Controller
             ->withQueryString();
 
         $stats = [
-            'total_products' => Product::count(),
-            'low_stock'      => InventoryItem::whereColumn('quantity_on_hand', '<=', 'reorder_point')->where('quantity_on_hand', '>', 0)->count(),
-            'out_of_stock'   => InventoryItem::where('quantity_on_hand', '<=', 0)->count(),
-            'total_value'    => InventoryItem::join('products', 'products.id', '=', 'inventory_items.product_id')
+            'total_products' => Product::where('tenant_id', $tid)->count(),
+            'low_stock'      => InventoryItem::where('tenant_id', $tid)->whereColumn('quantity_on_hand', '<=', 'reorder_point')->where('quantity_on_hand', '>', 0)->count(),
+            'out_of_stock'   => InventoryItem::where('tenant_id', $tid)->where('quantity_on_hand', '<=', 0)->count(),
+            'total_value'    => InventoryItem::where('inventory_items.tenant_id', $tid)
+                ->join('products', 'products.id', '=', 'inventory_items.product_id')
                 ->selectRaw('SUM(inventory_items.quantity_on_hand * products.cost_price) as value')
                 ->value('value') ?? 0,
         ];

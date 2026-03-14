@@ -10,7 +10,9 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        $products = Product::query()
+        $tid = $this->tenantId();
+
+        $products = Product::where('tenant_id', $tid)
             ->when($request->search, fn ($q) => $q->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
                     ->orWhere('sku', 'like', "%{$request->search}%");
@@ -22,11 +24,11 @@ class ProductController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $categories = Product::select('category')->distinct()->pluck('category')->filter()->values();
+        $categories = Product::where('tenant_id', $tid)->select('category')->distinct()->pluck('category')->filter()->values();
 
         $stats = [
-            'total'        => Product::count(),
-            'active'       => Product::where('is_active', true)->count(),
+            'total'        => Product::where('tenant_id', $tid)->count(),
+            'active'       => Product::where('tenant_id', $tid)->where('is_active', true)->count(),
             'low_stock'    => 0,
             'out_of_stock' => 0,
         ];
