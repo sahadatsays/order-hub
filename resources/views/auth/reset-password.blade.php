@@ -29,8 +29,7 @@
             </div>
         @endif
 
-        {{-- TODO: update action to route('password.store') once auth routes are registered --}}
-        <form method="POST" action="#" class="space-y-4">
+        <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
             @csrf
 
             <input type="hidden" name="token" value="{{ $token ?? '' }}">
@@ -81,7 +80,7 @@
         </form>
 
         <p class="mt-6 text-center text-sm text-zinc-500">
-            <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">← Back to sign in</a>
+            <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">← Back to sign in</a>
         </p>
 
     </div>

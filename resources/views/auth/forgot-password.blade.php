@@ -2,7 +2,7 @@
     <div class="w-full max-w-sm">
 
         <a
-            href="#"
+            href="{{ route('login') }}"
             class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-700 mb-8 transition-colors"
         >
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -36,8 +36,7 @@
             </div>
 
             {{-- Hidden resend form --}}
-            {{-- TODO: update action to route('password.email') once auth routes are registered --}}
-            <form id="resend-form" method="POST" action="#" class="hidden">
+            <form id="resend-form" method="POST" action="{{ route('password.email') }}" class="hidden">
                 @csrf
                 <input type="hidden" name="email" value="{{ old('email', request('email', '')) }}">
             </form>
@@ -64,8 +63,7 @@
                 </div>
             @endif
 
-            {{-- TODO: update action to route('password.email') once auth routes are registered --}}
-            <form method="POST" action="#" class="space-y-4">
+            <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
                 @csrf
 
                 <x-ui.input
@@ -85,7 +83,7 @@
 
             <p class="mt-6 text-center text-sm text-zinc-500">
                 Remembered your password?
-                <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Sign in →</a>
+                <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Sign in →</a>
             </p>
         @endif
 

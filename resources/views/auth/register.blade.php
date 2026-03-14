@@ -11,8 +11,7 @@
             </div>
         @endif
 
-        {{-- TODO: update action to route('register') once auth routes are registered --}}
-        <form method="POST" action="#" class="space-y-4">
+        <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
             @csrf
 
             <x-ui.input
@@ -101,7 +100,7 @@
 
         <p class="mt-6 text-center text-sm text-zinc-500">
             Already have an account?
-            <a href="#" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Sign in →</a>
+            <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors">Sign in →</a>
         </p>
     </div>
 
