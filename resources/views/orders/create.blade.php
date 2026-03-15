@@ -53,7 +53,7 @@
                 </div>
 
                 {{-- Order Items Card --}}
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm">
                     <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
                         <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
                             <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -61,77 +61,18 @@
                         <h3 class="text-sm font-bold text-slate-900">Order Items</h3>
                     </div>
 
-                    <div id="order-items-table-wrapper" class="overflow-x-auto">
+                    <div id="order-items-table-wrapper">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-100">
                                     <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Product</th>
-                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-24">Qty</th>
-                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-32">Unit Price</th>
-                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-32">Total</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-36">Qty</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-44">Unit Price</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-36">Total</th>
                                     <th class="px-5 py-3 w-12"></th>
                                 </tr>
                             </thead>
                             <tbody id="order-items-body" class="divide-y divide-slate-50">
-
-                                {{-- Pre-filled row 1 --}}
-                                <tr class="order-item-row hover:bg-slate-50/50 transition-colors">
-                                    <td class="px-5 py-3.5">
-                                        <input type="text" name="items[0][product]" value="Enterprise Suite License" placeholder="Product name or SKU"
-                                            class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        <input type="number" name="items[0][qty]" value="1" min="1"
-                                            class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-qty transition-all"
-                                            oninput="recalcRow(this)">
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        <div class="relative">
-                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-xs pointer-events-none font-medium">$</span>
-                                            <input type="number" name="items[0][unit_price]" value="350.00" min="0" step="0.01"
-                                                class="w-full pl-7 pr-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-price transition-all"
-                                                oninput="recalcRow(this)">
-                                        </div>
-                                    </td>
-                                    <td class="px-5 py-3.5 text-right">
-                                        <span class="text-sm font-bold text-slate-900 item-total">$350.00</span>
-                                    </td>
-                                    <td class="px-5 py-3.5 text-center">
-                                        <button type="button" onclick="removeOrderRow(this)" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all mx-auto">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                {{-- Pre-filled row 2 --}}
-                                <tr class="order-item-row hover:bg-slate-50/50 transition-colors">
-                                    <td class="px-5 py-3.5">
-                                        <input type="text" name="items[1][product]" value="Pro Add-on Bundle" placeholder="Product name or SKU"
-                                            class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        <input type="number" name="items[1][qty]" value="2" min="1"
-                                            class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-qty transition-all"
-                                            oninput="recalcRow(this)">
-                                    </td>
-                                    <td class="px-5 py-3.5">
-                                        <div class="relative">
-                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-xs pointer-events-none font-medium">$</span>
-                                            <input type="number" name="items[1][unit_price]" value="220.00" min="0" step="0.01"
-                                                class="w-full pl-7 pr-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-price transition-all"
-                                                oninput="recalcRow(this)">
-                                        </div>
-                                    </td>
-                                    <td class="px-5 py-3.5 text-right">
-                                        <span class="text-sm font-bold text-slate-900 item-total">$440.00</span>
-                                    </td>
-                                    <td class="px-5 py-3.5 text-center">
-                                        <button type="button" onclick="removeOrderRow(this)" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all mx-auto">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                                        </button>
-                                    </td>
-                                </tr>
-
                             </tbody>
                         </table>
                     </div>
@@ -149,7 +90,7 @@
                     <div class="border-t border-slate-100 bg-slate-50/80 px-6 py-5 space-y-3">
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-slate-500 font-medium">Subtotal</span>
-                            <span id="subtotal-display" class="font-bold text-slate-900">$790.00</span>
+                            <span id="subtotal-display" class="font-bold text-slate-900">$0.00</span>
                         </div>
                         <div class="flex items-center justify-between text-sm gap-4">
                             <label for="discount_amount" class="text-slate-500 font-medium shrink-0">Discount</label>
@@ -184,7 +125,7 @@
                         </div>
                         <div class="flex items-center justify-between gap-4 pt-3 border-t border-slate-200">
                             <span class="text-base font-bold text-slate-900">Total</span>
-                            <span id="total-display" class="text-xl font-bold text-indigo-600">$790.00</span>
+                            <span id="total-display" class="text-xl font-bold text-indigo-600">$0.00</span>
                         </div>
                     </div>
                 </div>
@@ -404,23 +345,144 @@
 
 <script>
     // ─────────────────────────────────────────
+    // Product row search (AJAX per row)
+    // ─────────────────────────────────────────
+    function ProductRowSearch(cell) {
+        this.cell = cell;
+        this.url = cell.dataset.productSearch;
+        this.input = cell.querySelector('.product-search-input');
+        this.dropdown = cell.querySelector('.product-search-dropdown');
+        this.idInput = cell.querySelector('.product-id-input');
+        this.debounceTimer = null;
+        this._bindEvents();
+    }
+
+    ProductRowSearch.prototype._bindEvents = function() {
+        var self = this;
+        this.input.addEventListener('input', function() {
+            clearTimeout(self.debounceTimer);
+            var q = self.input.value.trim();
+            if (!q) { self._closeDropdown(); return; }
+            self.debounceTimer = setTimeout(function() { self._search(q); }, 250);
+        });
+        this.input.addEventListener('focus', function() {
+            var q = self.input.value.trim();
+            if (q) { self._search(q); }
+        });
+        this.input.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { self._closeDropdown(); }
+        });
+        document.addEventListener('click', function(e) {
+            if (!self.cell.contains(e.target)) { self._closeDropdown(); }
+        });
+    };
+
+    ProductRowSearch.prototype._search = function(q) {
+        var self = this;
+        fetch(this.url + '?q=' + encodeURIComponent(q), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(products) { self._renderDropdown(products); })
+        .catch(function() { self._closeDropdown(); });
+    };
+
+    ProductRowSearch.prototype._renderDropdown = function(products) {
+        var self = this;
+        if (!products.length) {
+            this.dropdown.innerHTML = '<div class="px-4 py-3 text-xs text-slate-400">No products found</div>';
+            this.dropdown.style.display = 'block';
+            return;
+        }
+        var html = '';
+        products.forEach(function(p) {
+            html += '<button type="button" class="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm hover:bg-indigo-50 transition-colors text-left border-b border-slate-50 last:border-0"'
+                + ' data-id="' + self._esc(String(p.id)) + '"'
+                + ' data-name="' + self._esc(p.name) + '"'
+                + ' data-price="' + self._esc(String(p.price)) + '">'
+                + '<div class="min-w-0">'
+                + '<div class="font-medium text-slate-800 truncate">' + self._esc(p.name) + '</div>'
+                + (p.sku ? '<div class="text-xs text-slate-400">' + self._esc(p.sku) + '</div>' : '')
+                + '</div>'
+                + '<div class="text-xs font-semibold text-slate-500 shrink-0">$' + parseFloat(p.price).toFixed(2) + '</div>'
+                + '</button>';
+        });
+        this.dropdown.innerHTML = html;
+        this.dropdown.querySelectorAll('button').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                self._select({ id: btn.dataset.id, name: btn.dataset.name, price: btn.dataset.price });
+            });
+        });
+        this.dropdown.style.display = 'block';
+    };
+
+    ProductRowSearch.prototype._select = function(product) {
+        this.idInput.value = product.id;
+        this.input.value = product.name;
+        this._closeDropdown();
+        var row = this.cell.closest('tr.order-item-row');
+        if (row) {
+            var priceInput = row.querySelector('.item-price');
+            if (priceInput) {
+                priceInput.value = parseFloat(product.price).toFixed(2);
+                recalcRow(priceInput);
+            }
+        }
+    };
+
+    ProductRowSearch.prototype._closeDropdown = function() {
+        this.dropdown.style.display = 'none';
+    };
+
+    ProductRowSearch.prototype._esc = function(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
+
+    ProductRowSearch.initCell = function(cell) {
+        cell._prsInit = new ProductRowSearch(cell);
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#order-items-body .product-search-cell[data-product-search]').forEach(function(cell) {
+            ProductRowSearch.initCell(cell);
+        });
+    });
+
+    // ─────────────────────────────────────────
     // Order items: add / remove rows, recalc
     // ─────────────────────────────────────────
-    let rowIndex = 2;
+    const productSearchUrl = '{{ route('products.search') }}';
+    let rowIndex = 0;
 
     function addOrderRow() {
         const tbody = document.getElementById('order-items-body');
+        const searchUrl = productSearchUrl;
         const row = document.createElement('tr');
         row.className = 'order-item-row hover:bg-slate-50/50 transition-colors';
         row.innerHTML = `
             <td class="px-5 py-3.5">
-                <input type="text" name="items[${rowIndex}][product]" placeholder="Product name or SKU"
-                    class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
+                <div class="product-search-cell" data-product-search="${searchUrl}">
+                    <input type="hidden" name="items[${rowIndex}][product_id]" class="product-id-input">
+                    <div class="relative">
+                        <input type="text" name="items[${rowIndex}][product_name]" placeholder="Search product or SKU..."
+                            class="product-search-input w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all"
+                            autocomplete="off">
+                        <div class="product-search-dropdown absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" style="display:none"></div>
+                    </div>
+                </div>
             </td>
             <td class="px-5 py-3.5">
-                <input type="number" name="items[${rowIndex}][qty]" value="1" min="1"
-                    class="w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-qty transition-all"
-                    oninput="recalcRow(this)">
+                <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent focus-within:bg-white transition-all">
+                    <button type="button" onclick="stepQty(this, -1)" class="flex items-center justify-center w-8 h-8 shrink-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
+                    </button>
+                    <input type="number" name="items[${rowIndex}][qty]" value="1" min="1"
+                        class="w-full py-2 text-sm text-center bg-transparent border-0 focus:outline-none focus:ring-0 item-qty transition-all"
+                        oninput="recalcRow(this)">
+                    <button type="button" onclick="stepQty(this, 1)" class="flex items-center justify-center w-8 h-8 shrink-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                </div>
             </td>
             <td class="px-5 py-3.5">
                 <div class="relative">
@@ -440,8 +502,18 @@
             </td>
         `;
         tbody.appendChild(row);
+        ProductRowSearch.initCell(row.querySelector('.product-search-cell'));
         rowIndex++;
         recalcTotals();
+    }
+
+    function stepQty(btn, delta) {
+        const input = btn.closest('td').querySelector('.item-qty');
+        const min = parseInt(input.min) || 1;
+        const current = parseInt(input.value) || 1;
+        const next = Math.max(min, current + delta);
+        input.value = next;
+        recalcRow(input);
     }
 
     function removeOrderRow(btn) {

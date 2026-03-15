@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('customers', CustomerController::class);
 
     // Products
+    Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
     Route::resource('products', ProductController::class);
 
     // Inventory

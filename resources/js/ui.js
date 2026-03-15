@@ -234,32 +234,20 @@ function initSidebar() {
         const overlay  = document.getElementById('sidebar-overlay');
         if (!sidebar) { return; }
 
-        const isMobile = window.innerWidth < 1024;
+        // Only handle mobile slide-in/out; desktop sidebar is always visible at full width
+        if (window.innerWidth >= 1024) { return; }
 
-        if (isMobile) {
-            const isOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
-            if (isOpen) {
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('-translate-x-full');
-                sidebar.setAttribute('data-sidebar-open', 'false');
-                if (overlay) { overlay.classList.add('hidden'); }
-            } else {
-                sidebar.classList.remove('-translate-x-full');
-                sidebar.classList.add('translate-x-0');
-                sidebar.setAttribute('data-sidebar-open', 'true');
-                if (overlay) { overlay.classList.remove('hidden'); }
-            }
+        const isOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
+        if (isOpen) {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add('-translate-x-full');
+            sidebar.setAttribute('data-sidebar-open', 'false');
+            if (overlay) { overlay.classList.add('hidden'); }
         } else {
-            const isCollapsed = sidebar.getAttribute('data-sidebar-collapsed') === 'true';
-            if (isCollapsed) {
-                sidebar.classList.remove('lg:w-16');
-                sidebar.classList.add('lg:w-64');
-                sidebar.setAttribute('data-sidebar-collapsed', 'false');
-            } else {
-                sidebar.classList.remove('lg:w-64');
-                sidebar.classList.add('lg:w-16');
-                sidebar.setAttribute('data-sidebar-collapsed', 'true');
-            }
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.classList.add('translate-x-0');
+            sidebar.setAttribute('data-sidebar-open', 'true');
+            if (overlay) { overlay.classList.remove('hidden'); }
         }
     });
 }

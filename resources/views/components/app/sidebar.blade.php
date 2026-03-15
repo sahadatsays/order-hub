@@ -82,16 +82,6 @@
             <p class="text-sm font-semibold text-white truncate">Order Hub</p>
             <p class="text-xs text-zinc-400 truncate">Acme Corp</p>
         </div>
-        <button
-            type="button"
-            data-sidebar-toggle
-            class="hidden lg:flex items-center justify-center w-6 h-6 rounded-md text-zinc-400 hover:text-white transition-colors"
-            aria-label="Collapse sidebar"
-        >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-            </svg>
-        </button>
     </div>
 
     {{-- Search shortcut --}}
