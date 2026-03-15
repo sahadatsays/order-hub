@@ -33,6 +33,9 @@
     {{-- Sidebar --}}
     <x-app.sidebar />
 
+    {{-- Global Search Modal --}}
+    <x-app.search-modal />
+
     {{-- Main content area — offset by sidebar width on large screens --}}
     <div class="flex flex-col min-h-screen min-w-0 lg:ml-64 flex-1">
 
@@ -50,6 +53,8 @@
     <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 w-80"></div>
 
 </div>
+
+@stack('scripts')
 
 </body>
 </html>

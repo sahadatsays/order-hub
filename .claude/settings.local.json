@@ -4,7 +4,9 @@
       "Bash(vendor/bin/pint --dirty --format agent)",
       "Bash(vendor/bin/pint --dirty --format agent resources/views/components/ui/)",
       "Bash(php artisan:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "mcp__laravel-boost__last-error",
+      "mcp__laravel-boost__browser-logs"
     ]
   }
 }

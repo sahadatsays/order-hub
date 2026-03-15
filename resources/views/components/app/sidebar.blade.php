@@ -7,6 +7,12 @@
             'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
         ],
         [
+            'label' => 'POS Terminal',
+            'route' => 'pos.index',
+            'routePattern' => 'pos*',
+            'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
+        ],
+        [
             'label' => 'Orders',
             'route' => 'orders.index',
             'routePattern' => 'orders*',
@@ -51,6 +57,12 @@
             'routePattern' => 'integrations*',
             'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/>',
         ],
+        [
+            'label' => 'Notifications',
+            'route' => 'notifications.index',
+            'routePattern' => 'notifications*',
+            'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>',
+        ],
     ];
 @endphp
 
@@ -70,16 +82,6 @@
             <p class="text-sm font-semibold text-white truncate">Order Hub</p>
             <p class="text-xs text-zinc-400 truncate">Acme Corp</p>
         </div>
-        <button
-            type="button"
-            data-sidebar-toggle
-            class="hidden lg:flex items-center justify-center w-6 h-6 rounded-md text-zinc-400 hover:text-white transition-colors"
-            aria-label="Collapse sidebar"
-        >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-            </svg>
-        </button>
     </div>
 
     {{-- Search shortcut --}}
@@ -87,7 +89,7 @@
         <button
             type="button"
             class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-zinc-400 bg-zinc-900 hover:bg-zinc-800 transition-colors group"
-            onclick="document.querySelector('[data-global-search]')?.focus()"
+            data-open-search-modal
         >
             <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>

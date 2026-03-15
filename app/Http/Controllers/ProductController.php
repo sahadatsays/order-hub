@@ -3,11 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    /**
+     * AJAX: Search active products by name or SKU.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $tid = $this->tenantId();
+        $q = $request->get('q', '');
+
+        $products = Product::where('tenant_id', $tid)
+            ->where('is_active', true)
+            ->when($q, fn ($query) => $query->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('sku', 'like', "%{$q}%");
+            }))
+            ->limit(15)
+            ->get(['id', 'name', 'sku', 'price']);
+
+        return response()->json($products);
+    }
+
     public function index(Request $request): View
     {
         $tid = $this->tenantId();
@@ -27,9 +48,9 @@ class ProductController extends Controller
         $categories = Product::where('tenant_id', $tid)->select('category')->distinct()->pluck('category')->filter()->values();
 
         $stats = [
-            'total'        => Product::where('tenant_id', $tid)->count(),
-            'active'       => Product::where('tenant_id', $tid)->where('is_active', true)->count(),
-            'low_stock'    => 0,
+            'total' => Product::where('tenant_id', $tid)->count(),
+            'active' => Product::where('tenant_id', $tid)->where('is_active', true)->count(),
+            'low_stock' => 0,
             'out_of_stock' => 0,
         ];
 
@@ -44,16 +65,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'sku'             => 'nullable|string|max:100',
-            'description'     => 'nullable|string|max:5000',
-            'category'        => 'nullable|string|max:100',
-            'brand'           => 'nullable|string|max:100',
-            'price'           => 'required|numeric|min:0',
-            'cost_price'      => 'nullable|numeric|min:0',
-            'compare_price'   => 'nullable|numeric|min:0',
-            'weight'          => 'nullable|numeric|min:0',
-            'is_active'       => 'boolean',
+            'name' => 'required|string|max:255',
+            'sku' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:5000',
+            'category' => 'nullable|string|max:100',
+            'brand' => 'nullable|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'cost_price' => 'nullable|numeric|min:0',
+            'compare_price' => 'nullable|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
+            'is_active' => 'boolean',
             'track_inventory' => 'boolean',
         ]);
 
@@ -83,16 +104,16 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'sku'             => 'nullable|string|max:100',
-            'description'     => 'nullable|string|max:5000',
-            'category'        => 'nullable|string|max:100',
-            'brand'           => 'nullable|string|max:100',
-            'price'           => 'required|numeric|min:0',
-            'cost_price'      => 'nullable|numeric|min:0',
-            'compare_price'   => 'nullable|numeric|min:0',
-            'weight'          => 'nullable|numeric|min:0',
-            'is_active'       => 'boolean',
+            'name' => 'required|string|max:255',
+            'sku' => 'nullable|string|max:100',
+            'description' => 'nullable|string|max:5000',
+            'category' => 'nullable|string|max:100',
+            'brand' => 'nullable|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'cost_price' => 'nullable|numeric|min:0',
+            'compare_price' => 'nullable|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
+            'is_active' => 'boolean',
             'track_inventory' => 'boolean',
         ]);
 

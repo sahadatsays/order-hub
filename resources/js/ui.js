@@ -234,32 +234,20 @@ function initSidebar() {
         const overlay  = document.getElementById('sidebar-overlay');
         if (!sidebar) { return; }
 
-        const isMobile = window.innerWidth < 1024;
+        // Only handle mobile slide-in/out; desktop sidebar is always visible at full width
+        if (window.innerWidth >= 1024) { return; }
 
-        if (isMobile) {
-            const isOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
-            if (isOpen) {
-                sidebar.classList.remove('translate-x-0');
-                sidebar.classList.add('-translate-x-full');
-                sidebar.setAttribute('data-sidebar-open', 'false');
-                if (overlay) { overlay.classList.add('hidden'); }
-            } else {
-                sidebar.classList.remove('-translate-x-full');
-                sidebar.classList.add('translate-x-0');
-                sidebar.setAttribute('data-sidebar-open', 'true');
-                if (overlay) { overlay.classList.remove('hidden'); }
-            }
+        const isOpen = sidebar.getAttribute('data-sidebar-open') === 'true';
+        if (isOpen) {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add('-translate-x-full');
+            sidebar.setAttribute('data-sidebar-open', 'false');
+            if (overlay) { overlay.classList.add('hidden'); }
         } else {
-            const isCollapsed = sidebar.getAttribute('data-sidebar-collapsed') === 'true';
-            if (isCollapsed) {
-                sidebar.classList.remove('lg:w-16');
-                sidebar.classList.add('lg:w-64');
-                sidebar.setAttribute('data-sidebar-collapsed', 'false');
-            } else {
-                sidebar.classList.remove('lg:w-64');
-                sidebar.classList.add('lg:w-16');
-                sidebar.setAttribute('data-sidebar-collapsed', 'true');
-            }
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.classList.add('translate-x-0');
+            sidebar.setAttribute('data-sidebar-open', 'true');
+            if (overlay) { overlay.classList.remove('hidden'); }
         }
     });
 }
@@ -313,6 +301,186 @@ function initTabs() {
     });
 }
 
+// ---- Global Search Modal -----------------------------------
+
+function initGlobalSearch() {
+    const modal = document.getElementById('global-search-modal');
+    if (!modal) { return; }
+
+    const input = modal.querySelector('[data-search-input]');
+    const defaultSection = modal.querySelector('[data-search-default]');
+    const dynamicSection = modal.querySelector('[data-search-dynamic]');
+    const loadingSection = modal.querySelector('[data-search-loading]');
+    const emptySection = modal.querySelector('[data-search-empty]');
+    const backdrop = modal.querySelector('[data-search-backdrop]');
+
+    let debounceTimer = null;
+    let activeIndex = -1;
+
+    function openSearch() {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+        requestAnimationFrame(() => {
+            if (input) { input.value = ''; input.focus(); }
+            showDefault();
+        });
+    }
+
+    function closeSearch() {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        if (input) { input.value = ''; }
+        activeIndex = -1;
+    }
+
+    function showDefault() {
+        if (defaultSection) { defaultSection.classList.remove('hidden'); }
+        if (dynamicSection) { dynamicSection.classList.add('hidden'); }
+        if (loadingSection) { loadingSection.classList.add('hidden'); }
+        if (emptySection) { emptySection.classList.add('hidden'); }
+        activeIndex = -1;
+    }
+
+    function showLoading() {
+        if (defaultSection) { defaultSection.classList.add('hidden'); }
+        if (dynamicSection) { dynamicSection.classList.add('hidden'); }
+        if (loadingSection) { loadingSection.classList.remove('hidden'); }
+        if (emptySection) { emptySection.classList.add('hidden'); }
+    }
+
+    function showResults(results) {
+        if (defaultSection) { defaultSection.classList.add('hidden'); }
+        if (loadingSection) { loadingSection.classList.add('hidden'); }
+
+        if (results.length === 0) {
+            if (dynamicSection) { dynamicSection.classList.add('hidden'); }
+            if (emptySection) { emptySection.classList.remove('hidden'); }
+            return;
+        }
+
+        if (emptySection) { emptySection.classList.add('hidden'); }
+        if (dynamicSection) {
+            const typeIcons = {
+                order: '<svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>',
+                customer: '<svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>',
+                product: '<svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>',
+            };
+
+            const typeBadges = {
+                order: '<span class="text-xs text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-medium">Order</span>',
+                customer: '<span class="text-xs text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded font-medium">Customer</span>',
+                product: '<span class="text-xs text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded font-medium">Product</span>',
+            };
+
+            let html = '';
+            results.forEach((r, i) => {
+                html += `<a href="${r.url}" class="flex items-center gap-3 px-4 py-2.5 hover:bg-zinc-50 transition-colors search-result-item" data-result-index="${i}">
+                    ${typeIcons[r.type] || ''}
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm text-zinc-800 truncate">${r.label}</p>
+                        <p class="text-xs text-zinc-500 truncate">${r.description}</p>
+                    </div>
+                    ${typeBadges[r.type] || ''}
+                </a>`;
+            });
+            dynamicSection.innerHTML = html;
+            dynamicSection.classList.remove('hidden');
+        }
+        activeIndex = -1;
+    }
+
+    function highlightResult(index) {
+        const items = modal.querySelectorAll('.search-result-item');
+        items.forEach((el, i) => {
+            if (i === index) {
+                el.classList.add('bg-zinc-100');
+            } else {
+                el.classList.remove('bg-zinc-100');
+            }
+        });
+    }
+
+    // Search trigger buttons
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-open-search-modal]');
+        if (trigger) {
+            e.preventDefault();
+            openSearch();
+        }
+    });
+
+    // Backdrop click closes
+    if (backdrop) {
+        backdrop.addEventListener('click', closeSearch);
+    }
+
+    // Keyboard shortcut ⌘K / Ctrl+K
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            if (modal.classList.contains('hidden')) {
+                openSearch();
+            } else {
+                closeSearch();
+            }
+        }
+
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeSearch();
+        }
+
+        // Arrow nav in results
+        if (!modal.classList.contains('hidden')) {
+            const items = modal.querySelectorAll('.search-result-item');
+            if (items.length === 0) { return; }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                highlightResult(activeIndex);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                activeIndex = Math.max(activeIndex - 1, 0);
+                highlightResult(activeIndex);
+            } else if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
+                e.preventDefault();
+                items[activeIndex].click();
+            }
+        }
+    });
+
+    // Debounced search
+    if (input) {
+        input.addEventListener('input', () => {
+            const q = input.value.trim();
+            clearTimeout(debounceTimer);
+
+            if (q.length < 2) {
+                showDefault();
+                return;
+            }
+
+            showLoading();
+
+            debounceTimer = setTimeout(() => {
+                fetch(`/search?q=${encodeURIComponent(q)}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        showResults(data.results || []);
+                    })
+                    .catch(() => {
+                        showResults([]);
+                    });
+            }, 300);
+        });
+    }
+}
+
 // ---- Init --------------------------------------------------
 
 function init() {
@@ -321,6 +489,7 @@ function init() {
     initDropdowns();
     initSidebar();
     initTabs();
+    initGlobalSearch();
 }
 
 document.addEventListener('DOMContentLoaded', init);

@@ -24,7 +24,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => $classes]) }}>
-    @if($header->isNotEmpty())
+    @if($header && $header->isNotEmpty())
         <div class="border-b border-zinc-100 pb-4 mb-4">
             {{ $header }}
         </div>
@@ -32,7 +32,7 @@
 
     {{ $slot }}
 
-    @if($footer->isNotEmpty())
+    @if($footer && $footer->isNotEmpty())
         <div class="border-t border-zinc-100 pt-4 mt-4">
             {{ $footer }}
         </div>

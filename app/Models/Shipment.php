@@ -8,6 +8,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Shipment extends Model
 {
+    const STATUSES = [
+        'pending'          => 'Pending',
+        'picked_up'        => 'Picked Up',
+        'in_transit'       => 'In Transit',
+        'out_for_delivery' => 'Out for Delivery',
+        'delivered'        => 'Delivered',
+        'failed'           => 'Failed',
+        'returned'         => 'Returned',
+    ];
+
+    const STATUS_COLORS = [
+        'pending'          => 'yellow',
+        'picked_up'        => 'blue',
+        'in_transit'       => 'indigo',
+        'out_for_delivery' => 'orange',
+        'delivered'        => 'green',
+        'failed'           => 'red',
+        'returned'         => 'zinc',
+    ];
+
     protected $fillable = [
         'order_id',
         'courier_id',
@@ -58,5 +78,15 @@ class Shipment extends Model
         return $this->tracking_number
             ? rtrim($base, '/') . '/' . $this->tracking_number
             : $base;
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return self::STATUSES[$this->status] ?? ucfirst($this->status);
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return self::STATUS_COLORS[$this->status] ?? 'zinc';
     }
 }

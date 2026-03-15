@@ -24,6 +24,13 @@ class Order extends Model
         'on_hold'    => 'On Hold',
     ];
 
+    const ORDER_TYPES = [
+        'pos'         => 'POS',
+        'manual'      => 'Manual',
+        'ecommerce'   => 'Ecommerce',
+        'imported'    => 'Imported',
+    ];
+
     const SOURCES = [
         'facebook'    => 'Facebook',
         'website'     => 'Website',
@@ -55,12 +62,32 @@ class Order extends Model
         'refunded' => 'Refunded',
     ];
 
+    const PAYMENT_STATUS_COLORS = [
+        'unpaid'   => 'red',
+        'partial'  => 'yellow',
+        'paid'     => 'green',
+        'refunded' => 'zinc',
+    ];
+
+    const SOURCE_COLORS = [
+        'facebook'    => 'blue',
+        'website'     => 'indigo',
+        'whatsapp'    => 'green',
+        'woocommerce' => 'purple',
+        'shopify'     => 'green',
+        'pos'         => 'orange',
+        'manual'      => 'zinc',
+        'phone'       => 'yellow',
+        'other'       => 'zinc',
+    ];
+
     protected $fillable = [
         'tenant_id',
         'customer_id',
         'created_by',
         'order_number',
         'source',
+        'order_type',
         'source_order_id',
         'source_raw_payload',
         'customer_name',
@@ -136,6 +163,11 @@ class Order extends Model
         return $this->hasMany(OrderStatusLog::class)->orderByDesc('created_at');
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(OrderPayment::class)->orderByDesc('created_at');
+    }
+
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class, 'auditable_id')
@@ -156,6 +188,21 @@ class Order extends Model
     public function getSourceLabelAttribute(): string
     {
         return self::SOURCES[$this->source] ?? ucfirst($this->source);
+    }
+
+    public function getSourceColorAttribute(): string
+    {
+        return self::SOURCE_COLORS[$this->source] ?? 'zinc';
+    }
+
+    public function getPaymentStatusLabelAttribute(): string
+    {
+        return self::PAYMENT_STATUSES[$this->payment_status] ?? ucfirst($this->payment_status);
+    }
+
+    public function getPaymentStatusColorAttribute(): string
+    {
+        return self::PAYMENT_STATUS_COLORS[$this->payment_status] ?? 'zinc';
     }
 
     public function getDueAmountAttribute(): float

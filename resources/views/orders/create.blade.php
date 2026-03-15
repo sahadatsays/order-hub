@@ -1,28 +1,27 @@
 <x-layouts.app title="New Order">
 <div class="max-w-full">
 
-    <!-- Page header -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('orders.index') }}" class="p-2 rounded-md hover:bg-zinc-100 text-zinc-500 transition-colors">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                </svg>
+    {{-- Page Header --}}
+    <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-4">
+            <a href="{{ route('orders.index') }}" class="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 transition-all">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             </a>
             <div>
-                <p class="text-xs text-zinc-400 mb-0.5">
-                    <a href="{{ route('orders.index') }}" class="hover:text-zinc-600 transition-colors">Orders</a>
-                    <span class="mx-1.5">›</span>
-                    <span class="text-zinc-600">New Order</span>
+                <p class="text-xs text-slate-400 mb-0.5 flex items-center gap-1.5">
+                    <a href="{{ route('orders.index') }}" class="hover:text-slate-600 transition-colors">Orders</a>
+                    <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    <span class="text-slate-600">New Order</span>
                 </p>
-                <h1 class="text-xl font-semibold text-zinc-900">New Order</h1>
+                <h1 class="text-2xl font-bold text-slate-900">New Order</h1>
             </div>
         </div>
-        <div class="flex items-center gap-2">
-            <button type="button" class="px-4 py-2 text-sm border border-zinc-300 rounded-md bg-white hover:bg-zinc-50 text-zinc-700 font-medium transition-colors">
+        <div class="flex items-center gap-3">
+            <button type="button" class="px-4 py-2.5 text-sm font-semibold border border-slate-200 rounded-xl bg-white hover:bg-slate-50 text-slate-700 transition-all shadow-sm">
                 Save Draft
             </button>
-            <button type="submit" form="create-order-form" class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors">
+            <button type="submit" form="create-order-form" class="flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all shadow-lg shadow-indigo-200">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                 Create Order
             </button>
         </div>
@@ -33,204 +32,80 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <!-- LEFT: 2/3 -->
-            <div class="lg:col-span-2 space-y-5">
+            {{-- LEFT: 2/3 --}}
+            <div class="lg:col-span-2 space-y-6">
 
-                <!-- Customer card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-zinc-900 mb-4">Customer</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label for="customer_search" class="block text-xs font-medium text-zinc-700 mb-1.5">Select or create customer</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0"/>
-                                    </svg>
-                                </div>
-                                <input
-                                    type="text"
-                                    id="customer_search"
-                                    name="customer_search"
-                                    placeholder="Search by name, email, or company..."
-                                    class="w-full pl-9 pr-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white placeholder:text-zinc-400"
-                                >
-                            </div>
+                {{-- Customer Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <div class="flex-1 h-px bg-zinc-200"></div>
-                            <span class="text-xs text-zinc-400">or</span>
-                            <div class="flex-1 h-px bg-zinc-200"></div>
-                        </div>
-                        <button type="button" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm border border-dashed border-zinc-300 rounded-md text-zinc-600 hover:bg-zinc-50 hover:border-zinc-400 transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                            </svg>
-                            Create new customer
-                        </button>
+                        <h3 class="text-sm font-bold text-slate-900">Customer</h3>
+                    </div>
+                    <div class="p-6">
+                        <x-ui.customer-search
+                            field-name="customer"
+                            placeholder="Search by name, phone, or email..."
+                            label="Select or create customer"
+                        />
                     </div>
                 </div>
 
-                <!-- Order Items card -->
-                <div class="bg-white border border-zinc-200 rounded-xl overflow-hidden">
-                    <div class="px-6 py-4 border-b border-zinc-100">
-                        <h3 class="text-sm font-semibold text-zinc-900">Order Items</h3>
+                {{-- Order Items Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900">Order Items</h3>
                     </div>
 
-                    <div id="order-items-table-wrapper" class="overflow-x-auto">
+                    <div id="order-items-table-wrapper">
                         <table class="w-full text-sm">
-                            <thead class="bg-zinc-50 border-b border-zinc-100">
-                                <tr>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">Product</th>
-                                    <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider w-20">Qty</th>
-                                    <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider w-28">Unit Price</th>
-                                    <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider w-28">Total</th>
-                                    <th class="px-4 py-3 w-10"></th>
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-100">
+                                    <th class="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Product</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-36">Qty</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-44">Unit Price</th>
+                                    <th class="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider w-36">Total</th>
+                                    <th class="px-5 py-3 w-12"></th>
                                 </tr>
                             </thead>
-                            <tbody id="order-items-body" class="divide-y divide-zinc-100">
-
-                                <!-- Pre-filled row 1 -->
-                                <tr class="order-item-row">
-                                    <td class="px-4 py-3">
-                                        <input
-                                            type="text"
-                                            name="items[0][product]"
-                                            value="Enterprise Suite License"
-                                            placeholder="Product name or SKU"
-                                            class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                        >
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <input
-                                            type="number"
-                                            name="items[0][qty]"
-                                            value="1"
-                                            min="1"
-                                            class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-qty"
-                                            oninput="recalcRow(this)"
-                                        >
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="relative">
-                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-sm pointer-events-none">$</span>
-                                            <input
-                                                type="number"
-                                                name="items[0][unit_price]"
-                                                value="350.00"
-                                                min="0"
-                                                step="0.01"
-                                                class="w-full pl-6 pr-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-price"
-                                                oninput="recalcRow(this)"
-                                            >
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-right">
-                                        <span class="text-sm font-medium text-zinc-900 item-total">$350.00</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button type="button" onclick="removeOrderRow(this)" class="p-1 rounded text-zinc-300 hover:text-red-500 hover:bg-red-50 transition-colors">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <!-- Pre-filled row 2 -->
-                                <tr class="order-item-row">
-                                    <td class="px-4 py-3">
-                                        <input
-                                            type="text"
-                                            name="items[1][product]"
-                                            value="Pro Add-on Bundle"
-                                            placeholder="Product name or SKU"
-                                            class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                        >
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <input
-                                            type="number"
-                                            name="items[1][qty]"
-                                            value="2"
-                                            min="1"
-                                            class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-qty"
-                                            oninput="recalcRow(this)"
-                                        >
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <div class="relative">
-                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-sm pointer-events-none">$</span>
-                                            <input
-                                                type="number"
-                                                name="items[1][unit_price]"
-                                                value="220.00"
-                                                min="0"
-                                                step="0.01"
-                                                class="w-full pl-6 pr-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-price"
-                                                oninput="recalcRow(this)"
-                                            >
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-right">
-                                        <span class="text-sm font-medium text-zinc-900 item-total">$440.00</span>
-                                    </td>
-                                    <td class="px-4 py-3 text-center">
-                                        <button type="button" onclick="removeOrderRow(this)" class="p-1 rounded text-zinc-300 hover:text-red-500 hover:bg-red-50 transition-colors">
-                                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
-
+                            <tbody id="order-items-body" class="divide-y divide-slate-50">
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- Add item button -->
-                    <div class="px-4 py-3 border-t border-zinc-100">
-                        <button type="button" id="add-item-btn" onclick="addOrderRow()" class="flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-                            </svg>
+                    {{-- Add item --}}
+                    <div class="px-5 py-3.5 border-t border-slate-100">
+                        <button type="button" id="add-item-btn" onclick="addOrderRow()"
+                            class="flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-3 py-2 rounded-xl transition-all">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                             Add item
                         </button>
                     </div>
 
-                    <!-- Totals -->
-                    <div class="px-6 py-4 border-t border-zinc-200 bg-zinc-50 space-y-2">
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <span class="text-zinc-600">Subtotal</span>
-                            <span id="subtotal-display" class="font-medium text-zinc-900">$790.00</span>
+                    {{-- Totals --}}
+                    <div class="border-t border-slate-100 bg-slate-50/80 px-6 py-5 space-y-3">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-slate-500 font-medium">Subtotal</span>
+                            <span id="subtotal-display" class="font-bold text-slate-900">$0.00</span>
                         </div>
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <label for="discount_amount" class="text-zinc-600">Discount</label>
-                            <div class="flex items-center gap-2">
-                                <div class="relative w-28">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-xs pointer-events-none">$</span>
-                                    <input
-                                        type="number"
-                                        id="discount_amount"
-                                        name="discount_amount"
-                                        value="0"
-                                        min="0"
-                                        step="0.01"
-                                        placeholder="0.00"
-                                        class="w-full pl-6 pr-3 py-1 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right bg-white"
-                                        oninput="recalcTotals()"
-                                    >
-                                </div>
+                        <div class="flex items-center justify-between text-sm gap-4">
+                            <label for="discount_amount" class="text-slate-500 font-medium shrink-0">Discount</label>
+                            <div class="relative w-36">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-xs pointer-events-none font-medium">$</span>
+                                <input type="number" id="discount_amount" name="discount_amount" value="0" min="0" step="0.01" placeholder="0.00"
+                                    class="w-full pl-7 pr-3.5 py-1.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-white transition-all"
+                                    oninput="recalcTotals()">
                             </div>
                         </div>
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <label for="tax_rate" class="text-zinc-600">Tax</label>
-                            <select
-                                id="tax_rate"
-                                name="tax_rate"
-                                class="w-28 border border-zinc-300 rounded-md px-3 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                onchange="recalcTotals()"
-                            >
+                        <div class="flex items-center justify-between text-sm gap-4">
+                            <label for="tax_rate" class="text-slate-500 font-medium shrink-0">Tax</label>
+                            <select id="tax_rate" name="tax_rate"
+                                class="w-36 border border-slate-200 rounded-xl px-3.5 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 transition-all"
+                                onchange="recalcTotals()">
                                 <option value="0">0%</option>
                                 <option value="5">5%</option>
                                 <option value="8">8%</option>
@@ -239,143 +114,89 @@
                                 <option value="20">20%</option>
                             </select>
                         </div>
-                        <div class="flex items-center justify-between gap-4 text-sm">
-                            <label for="shipping_cost" class="text-zinc-600">Shipping</label>
-                            <div class="relative w-28">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-xs pointer-events-none">$</span>
-                                <input
-                                    type="number"
-                                    id="shipping_cost"
-                                    name="shipping_cost"
-                                    value="0"
-                                    min="0"
-                                    step="0.01"
-                                    placeholder="0.00"
-                                    class="w-full pl-6 pr-3 py-1 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right bg-white"
-                                    oninput="recalcTotals()"
-                                >
+                        <div class="flex items-center justify-between text-sm gap-4">
+                            <label for="shipping_cost" class="text-slate-500 font-medium shrink-0">Shipping</label>
+                            <div class="relative w-36">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-xs pointer-events-none font-medium">$</span>
+                                <input type="number" id="shipping_cost" name="shipping_cost" value="0" min="0" step="0.01" placeholder="0.00"
+                                    class="w-full pl-7 pr-3.5 py-1.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-white transition-all"
+                                    oninput="recalcTotals()">
                             </div>
                         </div>
-                        <div class="flex items-center justify-between gap-4 pt-2 border-t border-zinc-200 text-sm font-semibold">
-                            <span class="text-zinc-900">Total</span>
-                            <span id="total-display" class="text-zinc-900">$790.00</span>
+                        <div class="flex items-center justify-between gap-4 pt-3 border-t border-slate-200">
+                            <span class="text-base font-bold text-slate-900">Total</span>
+                            <span id="total-display" class="text-xl font-bold text-indigo-600">$0.00</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Shipping Address card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-zinc-900 mb-4">Shipping Address</h3>
-                    <div class="space-y-4">
+                {{-- Shipping Address Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900">Shipping Address</h3>
+                    </div>
+                    <div class="p-6 space-y-5">
 
-                        <!-- First name / Last name -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label for="first_name" class="block text-xs font-medium text-zinc-700 mb-1.5">First name</label>
-                                <input
-                                    type="text"
-                                    id="first_name"
-                                    name="first_name"
-                                    placeholder="Jane"
-                                    class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                >
+                                <label for="first_name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">First name</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="Jane"
+                                    class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                             </div>
                             <div>
-                                <label for="last_name" class="block text-xs font-medium text-zinc-700 mb-1.5">Last name</label>
-                                <input
-                                    type="text"
-                                    id="last_name"
-                                    name="last_name"
-                                    placeholder="Smith"
-                                    class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                >
+                                <label for="last_name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Last name</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Smith"
+                                    class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                             </div>
                         </div>
 
-                        <!-- Company -->
                         <div>
-                            <label for="company" class="block text-xs font-medium text-zinc-700 mb-1.5">
-                                Company
-                                <span class="text-zinc-400 font-normal">(optional)</span>
+                            <label for="company" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                Company <span class="text-slate-400 normal-case font-normal tracking-normal">(optional)</span>
                             </label>
-                            <input
-                                type="text"
-                                id="company"
-                                name="company"
-                                placeholder="Acme Corp"
-                                class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                            >
+                            <input type="text" id="company" name="company" placeholder="Acme Corp"
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                         </div>
 
-                        <!-- Address line 1 -->
                         <div>
-                            <label for="address_line1" class="block text-xs font-medium text-zinc-700 mb-1.5">Address line 1</label>
-                            <input
-                                type="text"
-                                id="address_line1"
-                                name="address_line1"
-                                placeholder="123 Business Ave, Suite 400"
-                                class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                            >
+                            <label for="address_line1" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Address line 1</label>
+                            <input type="text" id="address_line1" name="address_line1" placeholder="123 Business Ave, Suite 400"
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                         </div>
 
-                        <!-- Address line 2 -->
                         <div>
-                            <label for="address_line2" class="block text-xs font-medium text-zinc-700 mb-1.5">
-                                Address line 2
-                                <span class="text-zinc-400 font-normal">(optional)</span>
+                            <label for="address_line2" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                Address line 2 <span class="text-slate-400 normal-case font-normal tracking-normal">(optional)</span>
                             </label>
-                            <input
-                                type="text"
-                                id="address_line2"
-                                name="address_line2"
-                                placeholder="Floor, unit, building..."
-                                class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                            >
+                            <input type="text" id="address_line2" name="address_line2" placeholder="Floor, unit, building..."
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                         </div>
 
-                        <!-- City / State / ZIP -->
                         <div class="grid grid-cols-3 gap-4">
                             <div>
-                                <label for="city" class="block text-xs font-medium text-zinc-700 mb-1.5">City</label>
-                                <input
-                                    type="text"
-                                    id="city"
-                                    name="city"
-                                    placeholder="San Francisco"
-                                    class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                >
+                                <label for="city" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">City</label>
+                                <input type="text" id="city" name="city" placeholder="San Francisco"
+                                    class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                             </div>
                             <div>
-                                <label for="state" class="block text-xs font-medium text-zinc-700 mb-1.5">State / Province</label>
-                                <input
-                                    type="text"
-                                    id="state"
-                                    name="state"
-                                    placeholder="CA"
-                                    class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                >
+                                <label for="state" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">State</label>
+                                <input type="text" id="state" name="state" placeholder="CA"
+                                    class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                             </div>
                             <div>
-                                <label for="postal_code" class="block text-xs font-medium text-zinc-700 mb-1.5">ZIP / Postal code</label>
-                                <input
-                                    type="text"
-                                    id="postal_code"
-                                    name="postal_code"
-                                    placeholder="94105"
-                                    class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                                >
+                                <label for="postal_code" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">ZIP Code</label>
+                                <input type="text" id="postal_code" name="postal_code" placeholder="94105"
+                                    class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all">
                             </div>
                         </div>
 
-                        <!-- Country -->
                         <div>
-                            <label for="country" class="block text-xs font-medium text-zinc-700 mb-1.5">Country</label>
-                            <select
-                                id="country"
-                                name="country"
-                                class="w-full px-3 py-2 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-zinc-700"
-                            >
+                            <label for="country" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Country</label>
+                            <select id="country" name="country"
+                                class="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white text-slate-700 transition-all">
                                 <option value="">Select country...</option>
                                 <option value="US" selected>United States</option>
                                 <option value="CA">Canada</option>
@@ -393,51 +214,46 @@
                     </div>
                 </div>
 
-                <!-- Notes card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-6">
-                    <h3 class="text-sm font-semibold text-zinc-900 mb-4">Notes</h3>
-                    <div class="space-y-4">
+                {{-- Notes Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-900">Notes</h3>
+                    </div>
+                    <div class="p-6 space-y-5">
                         <div>
-                            <label for="internal_notes" class="block text-xs font-medium text-zinc-700 mb-1.5">
+                            <label for="internal_notes" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                                 Internal notes
-                                <span class="text-zinc-400 font-normal">— not visible to customer</span>
+                                <span class="text-slate-400 normal-case font-normal tracking-normal ml-1">— not visible to customer</span>
                             </label>
-                            <textarea
-                                id="internal_notes"
-                                name="internal_notes"
-                                rows="3"
+                            <textarea id="internal_notes" name="internal_notes" rows="3"
                                 placeholder="Add internal notes about this order (warehouse instructions, special handling, etc.)..."
-                                class="w-full border border-zinc-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-zinc-400"
-                            ></textarea>
+                                class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none placeholder:text-slate-400 transition-all"></textarea>
                         </div>
                         <div>
-                            <label for="customer_note" class="block text-xs font-medium text-zinc-700 mb-1.5">
+                            <label for="customer_note" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                                 Note to customer
-                                <span class="text-zinc-400 font-normal">— included in confirmation email</span>
+                                <span class="text-slate-400 normal-case font-normal tracking-normal ml-1">— included in confirmation email</span>
                             </label>
-                            <textarea
-                                id="customer_note"
-                                name="customer_note"
-                                rows="3"
+                            <textarea id="customer_note" name="customer_note" rows="3"
                                 placeholder="Thank you for your order! We'll process it within 1-2 business days..."
-                                class="w-full border border-zinc-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none placeholder:text-zinc-400"
-                            ></textarea>
+                                class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none placeholder:text-slate-400 transition-all"></textarea>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- RIGHT SIDEBAR: 1/3 -->
+            {{-- RIGHT SIDEBAR: 1/3 --}}
             <div class="space-y-5">
 
-                <!-- Status card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-5">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Status</h3>
-                    <select
-                        name="status"
-                        class="w-full border border-zinc-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-zinc-700"
-                    >
+                {{-- Status Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Status</h3>
+                    <select name="status"
+                        class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 font-medium transition-all">
                         <option value="pending" selected>Pending</option>
                         <option value="confirmed">Confirmed</option>
                         <option value="processing">Processing</option>
@@ -447,17 +263,14 @@
                     </select>
                 </div>
 
-                <!-- Payment card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-5">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Payment</h3>
-                    <div class="space-y-3">
+                {{-- Payment Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Payment</h3>
+                    <div class="space-y-4">
                         <div>
-                            <label for="payment_method" class="block text-xs font-medium text-zinc-700 mb-1.5">Payment method</label>
-                            <select
-                                id="payment_method"
-                                name="payment_method"
-                                class="w-full border border-zinc-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-zinc-700"
-                            >
+                            <label for="payment_method" class="block text-xs font-semibold text-slate-500 mb-1.5">Payment method</label>
+                            <select id="payment_method" name="payment_method"
+                                class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 transition-all">
                                 <option value="invoice">Invoice</option>
                                 <option value="stripe">Stripe</option>
                                 <option value="bank_transfer">Bank transfer</option>
@@ -466,66 +279,49 @@
                             </select>
                         </div>
                         <div>
-                            <label for="payment_terms" class="block text-xs font-medium text-zinc-700 mb-1.5">Payment terms</label>
-                            <select
-                                id="payment_terms"
-                                name="payment_terms"
-                                class="w-full border border-zinc-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-zinc-700"
-                            >
+                            <label for="payment_terms" class="block text-xs font-semibold text-slate-500 mb-1.5">Payment terms</label>
+                            <select id="payment_terms" name="payment_terms"
+                                class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 transition-all">
                                 <option value="immediate">Due immediately</option>
                                 <option value="net15">Net 15</option>
                                 <option value="net30" selected>Net 30</option>
                                 <option value="net60">Net 60</option>
                             </select>
                         </div>
-                        <div class="flex items-center justify-between pt-1">
-                            <label for="mark_as_paid" class="text-sm font-medium text-zinc-700 cursor-pointer">Mark as paid</label>
-                            <button
-                                type="button"
-                                id="mark-paid-toggle"
-                                role="switch"
-                                aria-checked="false"
+                        <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+                            <label for="mark_as_paid" class="text-sm font-semibold text-slate-700 cursor-pointer">Mark as paid</label>
+                            <button type="button" id="mark-paid-toggle" role="switch" aria-checked="false"
                                 onclick="toggleMarkPaid(this)"
-                                class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-zinc-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
-                            >
-                                <span class="pointer-events-none inline-block h-4 w-4 translate-x-0 rounded-full bg-white shadow-sm transition-transform duration-200"></span>
+                                class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-slate-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                <span class="pointer-events-none inline-block h-5 w-5 translate-x-0 rounded-full bg-white shadow-sm transition-transform duration-200 ring-0"></span>
                             </button>
                             <input type="hidden" id="mark_as_paid" name="mark_as_paid" value="0">
                         </div>
                     </div>
                 </div>
 
-                <!-- Tags card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-5">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Tags</h3>
-                    <div id="tags-container" class="flex flex-wrap gap-1.5 mb-2"></div>
+                {{-- Tags Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Tags</h3>
+                    <div id="tags-container" class="flex flex-wrap gap-1.5 mb-3"></div>
                     <div class="flex items-center gap-2">
-                        <input
-                            type="text"
-                            id="tag-input"
-                            placeholder="Add a tag..."
-                            class="flex-1 min-w-0 px-3 py-1.5 text-xs border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                            onkeydown="handleTagInput(event)"
-                        >
-                        <button
-                            type="button"
-                            onclick="addTag(document.getElementById('tag-input').value)"
-                            class="px-3 py-1.5 text-xs bg-zinc-100 hover:bg-zinc-200 text-zinc-700 rounded-md font-medium transition-colors"
-                        >
+                        <input type="text" id="tag-input" placeholder="Add a tag..."
+                            class="flex-1 min-w-0 px-3.5 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all"
+                            onkeydown="handleTagInput(event)">
+                        <button type="button" onclick="addTag(document.getElementById('tag-input').value)"
+                            class="px-3.5 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-all">
                             Add
                         </button>
                     </div>
-                    <p class="text-xs text-zinc-400 mt-1.5">Press Enter to add a tag</p>
+                    <p class="text-xs text-slate-400 mt-2">Press Enter to add a tag</p>
                     <input type="hidden" name="tags" id="tags-hidden" value="">
                 </div>
 
-                <!-- Assign to card -->
-                <div class="bg-white border border-zinc-200 rounded-xl p-5">
-                    <h3 class="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">Assign to</h3>
-                    <select
-                        name="assigned_to"
-                        class="w-full border border-zinc-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-zinc-700"
-                    >
+                {{-- Assign To Card --}}
+                <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Assign to</h3>
+                    <select name="assigned_to"
+                        class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-700 transition-all">
                         <option value="">Unassigned</option>
                         <option value="1">John Doe</option>
                         <option value="2">Sarah Kim</option>
@@ -533,7 +329,10 @@
                         <option value="4">Emily Chen</option>
                         <option value="5">David Park</option>
                     </select>
-                    <p class="text-xs text-zinc-400 mt-2">The assigned team member will be notified.</p>
+                    <p class="text-xs text-slate-400 mt-2.5 flex items-center gap-1.5">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        The assigned team member will be notified.
+                    </p>
                 </div>
 
             </div>
@@ -546,61 +345,175 @@
 
 <script>
     // ─────────────────────────────────────────
+    // Product row search (AJAX per row)
+    // ─────────────────────────────────────────
+    function ProductRowSearch(cell) {
+        this.cell = cell;
+        this.url = cell.dataset.productSearch;
+        this.input = cell.querySelector('.product-search-input');
+        this.dropdown = cell.querySelector('.product-search-dropdown');
+        this.idInput = cell.querySelector('.product-id-input');
+        this.debounceTimer = null;
+        this._bindEvents();
+    }
+
+    ProductRowSearch.prototype._bindEvents = function() {
+        var self = this;
+        this.input.addEventListener('input', function() {
+            clearTimeout(self.debounceTimer);
+            var q = self.input.value.trim();
+            if (!q) { self._closeDropdown(); return; }
+            self.debounceTimer = setTimeout(function() { self._search(q); }, 250);
+        });
+        this.input.addEventListener('focus', function() {
+            var q = self.input.value.trim();
+            if (q) { self._search(q); }
+        });
+        this.input.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { self._closeDropdown(); }
+        });
+        document.addEventListener('click', function(e) {
+            if (!self.cell.contains(e.target)) { self._closeDropdown(); }
+        });
+    };
+
+    ProductRowSearch.prototype._search = function(q) {
+        var self = this;
+        fetch(this.url + '?q=' + encodeURIComponent(q), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(products) { self._renderDropdown(products); })
+        .catch(function() { self._closeDropdown(); });
+    };
+
+    ProductRowSearch.prototype._renderDropdown = function(products) {
+        var self = this;
+        if (!products.length) {
+            this.dropdown.innerHTML = '<div class="px-4 py-3 text-xs text-slate-400">No products found</div>';
+            this.dropdown.style.display = 'block';
+            return;
+        }
+        var html = '';
+        products.forEach(function(p) {
+            html += '<button type="button" class="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm hover:bg-indigo-50 transition-colors text-left border-b border-slate-50 last:border-0"'
+                + ' data-id="' + self._esc(String(p.id)) + '"'
+                + ' data-name="' + self._esc(p.name) + '"'
+                + ' data-price="' + self._esc(String(p.price)) + '">'
+                + '<div class="min-w-0">'
+                + '<div class="font-medium text-slate-800 truncate">' + self._esc(p.name) + '</div>'
+                + (p.sku ? '<div class="text-xs text-slate-400">' + self._esc(p.sku) + '</div>' : '')
+                + '</div>'
+                + '<div class="text-xs font-semibold text-slate-500 shrink-0">$' + parseFloat(p.price).toFixed(2) + '</div>'
+                + '</button>';
+        });
+        this.dropdown.innerHTML = html;
+        this.dropdown.querySelectorAll('button').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                self._select({ id: btn.dataset.id, name: btn.dataset.name, price: btn.dataset.price });
+            });
+        });
+        this.dropdown.style.display = 'block';
+    };
+
+    ProductRowSearch.prototype._select = function(product) {
+        this.idInput.value = product.id;
+        this.input.value = product.name;
+        this._closeDropdown();
+        var row = this.cell.closest('tr.order-item-row');
+        if (row) {
+            var priceInput = row.querySelector('.item-price');
+            if (priceInput) {
+                priceInput.value = parseFloat(product.price).toFixed(2);
+                recalcRow(priceInput);
+            }
+        }
+    };
+
+    ProductRowSearch.prototype._closeDropdown = function() {
+        this.dropdown.style.display = 'none';
+    };
+
+    ProductRowSearch.prototype._esc = function(str) {
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    };
+
+    ProductRowSearch.initCell = function(cell) {
+        cell._prsInit = new ProductRowSearch(cell);
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#order-items-body .product-search-cell[data-product-search]').forEach(function(cell) {
+            ProductRowSearch.initCell(cell);
+        });
+    });
+
+    // ─────────────────────────────────────────
     // Order items: add / remove rows, recalc
     // ─────────────────────────────────────────
-    let rowIndex = 2;
+    const productSearchUrl = '{{ route('products.search') }}';
+    let rowIndex = 0;
 
     function addOrderRow() {
         const tbody = document.getElementById('order-items-body');
+        const searchUrl = productSearchUrl;
         const row = document.createElement('tr');
-        row.className = 'order-item-row';
+        row.className = 'order-item-row hover:bg-slate-50/50 transition-colors';
         row.innerHTML = `
-            <td class="px-4 py-3">
-                <input
-                    type="text"
-                    name="items[${rowIndex}][product]"
-                    placeholder="Product name or SKU"
-                    class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-zinc-400"
-                >
-            </td>
-            <td class="px-4 py-3">
-                <input
-                    type="number"
-                    name="items[${rowIndex}][qty]"
-                    value="1"
-                    min="1"
-                    class="w-full px-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-qty"
-                    oninput="recalcRow(this)"
-                >
-            </td>
-            <td class="px-4 py-3">
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 text-sm pointer-events-none">$</span>
-                    <input
-                        type="number"
-                        name="items[${rowIndex}][unit_price]"
-                        value="0.00"
-                        min="0"
-                        step="0.01"
-                        class="w-full pl-6 pr-3 py-1.5 text-sm border border-zinc-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-right item-price"
-                        oninput="recalcRow(this)"
-                    >
+            <td class="px-5 py-3.5">
+                <div class="product-search-cell" data-product-search="${searchUrl}">
+                    <input type="hidden" name="items[${rowIndex}][product_id]" class="product-id-input">
+                    <div class="relative">
+                        <input type="text" name="items[${rowIndex}][product_name]" placeholder="Search product or SKU..."
+                            class="product-search-input w-full px-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50 focus:bg-white placeholder:text-slate-400 transition-all"
+                            autocomplete="off">
+                        <div class="product-search-dropdown absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden" style="display:none"></div>
+                    </div>
                 </div>
             </td>
-            <td class="px-4 py-3 text-right">
-                <span class="text-sm font-medium text-zinc-900 item-total">$0.00</span>
+            <td class="px-5 py-3.5">
+                <div class="flex items-center border border-slate-200 rounded-xl overflow-hidden bg-slate-50 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent focus-within:bg-white transition-all">
+                    <button type="button" onclick="stepQty(this, -1)" class="flex items-center justify-center w-8 h-8 shrink-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
+                    </button>
+                    <input type="number" name="items[${rowIndex}][qty]" value="1" min="1"
+                        class="w-full py-2 text-sm text-center bg-transparent border-0 focus:outline-none focus:ring-0 item-qty transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        oninput="recalcRow(this)">
+                    <button type="button" onclick="stepQty(this, 1)" class="flex items-center justify-center w-8 h-8 shrink-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                </div>
             </td>
-            <td class="px-4 py-3 text-center">
-                <button type="button" onclick="removeOrderRow(this)" class="p-1 rounded text-zinc-300 hover:text-red-500 hover:bg-red-50 transition-colors">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+            <td class="px-5 py-3.5">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-xs pointer-events-none font-medium">$</span>
+                    <input type="number" name="items[${rowIndex}][unit_price]" value="0.00" min="0" step="0.01"
+                        class="w-full pl-7 pr-3.5 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-right bg-slate-50 focus:bg-white item-price transition-all"
+                        oninput="recalcRow(this)">
+                </div>
+            </td>
+            <td class="px-5 py-3.5 text-right">
+                <span class="text-sm font-bold text-slate-900 item-total">$0.00</span>
+            </td>
+            <td class="px-5 py-3.5 text-center">
+                <button type="button" onclick="removeOrderRow(this)" class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all mx-auto">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </td>
         `;
         tbody.appendChild(row);
+        ProductRowSearch.initCell(row.querySelector('.product-search-cell'));
         rowIndex++;
         recalcTotals();
+    }
+
+    function stepQty(btn, delta) {
+        const input = btn.closest('td').querySelector('.item-qty');
+        const min = parseInt(input.min) || 1;
+        const current = parseInt(input.value) || 1;
+        const next = Math.max(min, current + delta);
+        input.value = next;
+        recalcRow(input);
     }
 
     function removeOrderRow(btn) {
@@ -649,16 +562,16 @@
         btn.setAttribute('aria-checked', !isActive);
         const span = btn.querySelector('span');
         if (!isActive) {
-            btn.classList.remove('bg-zinc-200');
+            btn.classList.remove('bg-slate-200');
             btn.classList.add('bg-indigo-600');
             span.classList.remove('translate-x-0');
-            span.classList.add('translate-x-4');
+            span.classList.add('translate-x-5');
             document.getElementById('mark_as_paid').value = '1';
         } else {
-            btn.classList.add('bg-zinc-200');
+            btn.classList.add('bg-slate-200');
             btn.classList.remove('bg-indigo-600');
             span.classList.add('translate-x-0');
-            span.classList.remove('translate-x-4');
+            span.classList.remove('translate-x-5');
             document.getElementById('mark_as_paid').value = '0';
         }
     }
@@ -695,8 +608,8 @@
         container.innerHTML = '';
         tags.forEach(function(tag, index) {
             const span = document.createElement('span');
-            span.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-indigo-50 text-indigo-700 border border-indigo-100';
-            span.innerHTML = tag + ' <button type="button" onclick="removeTag(' + index + ')" class="text-indigo-400 hover:text-indigo-600 leading-none">×</button>';
+            span.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100';
+            span.innerHTML = tag + ' <button type="button" onclick="removeTag(' + index + ')" class="text-indigo-400 hover:text-indigo-700 leading-none transition-colors">×</button>';
             container.appendChild(span);
         });
         document.getElementById('tags-hidden').value = tags.join(',');
