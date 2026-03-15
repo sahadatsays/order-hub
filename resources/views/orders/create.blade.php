@@ -477,7 +477,7 @@
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
                     </button>
                     <input type="number" name="items[${rowIndex}][qty]" value="1" min="1"
-                        class="w-full py-2 text-sm text-center bg-transparent border-0 focus:outline-none focus:ring-0 item-qty transition-all"
+                        class="w-full py-2 text-sm text-center bg-transparent border-0 focus:outline-none focus:ring-0 item-qty transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         oninput="recalcRow(this)">
                     <button type="button" onclick="stepQty(this, 1)" class="flex items-center justify-center w-8 h-8 shrink-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
